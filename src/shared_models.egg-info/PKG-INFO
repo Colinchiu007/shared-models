@@ -1,0 +1,14 @@
+Metadata-Version: 2.4
+Name: shared-models
+Version: 0.1.0
+Summary: Pydantic v2 shared data models for platform-orchestrator pipeline
+Author: Colinchiu007
+License: MIT
+Keywords: pydantic,models,platform-orchestrator
+Classifier: Development Status :: 3 - Alpha
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.11
+Requires-Dist: pydantic>=2.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"

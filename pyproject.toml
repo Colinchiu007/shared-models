@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shared-models"
+version = "0.1.0"
+description = "Pydantic v2 shared data models for platform-orchestrator pipeline"
+authors = [{name = "Colinchiu007"}]
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.0",
+    "email-validator>=2.0",
+]
+license = {text = "MIT"}
+keywords = ["pydantic", "models", "platform-orchestrator"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

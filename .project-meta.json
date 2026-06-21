@@ -1,0 +1,13 @@
+{
+  "owner": "Colinchiu007",
+  "project_name": "shared-models",
+  "project_type": "library",
+  "role": "data_contract",
+  "safe_to_delete": false,
+  "version": "0.1.0",
+  "description": "Pydantic v2 shared data models for platform-orchestrator pipeline. Phase 0 deliverable.",
+  "critical_paths": {
+    "models": "src/shared_models/"
+  },
+  "pipeline_position": -1
+}
