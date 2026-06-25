@@ -1,0 +1,8 @@
+# .clinerules — shared-models 特定硬约束
+
+- rule: "只放 Pydantic v2 模型，不放业务逻辑"
+- rule: "新增字段必须有默认值（向后兼容），不能删除已有字段"
+- rule: "字段命名使用 snake_case"
+- rule: "类型标注使用 Python 3.12+ 语法（str | None, list[dict]）"
+- rule: "被多个模块引用的模型放 shared-models，仅单个模块使用的模型留在各自模块内"
+- rule: "shared-models 变更必须三组 Agent 全部 ACK + 协调者批准"
