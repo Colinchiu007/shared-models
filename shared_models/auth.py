@@ -26,12 +26,31 @@ class UserLoginRequest(BaseModel):
     login_method: str = Field(default="password", pattern="^(password|sms)$")
 
 
+class LoginRequest(BaseModel):
+    """Login request — platform-orchestrator compatible.
+
+    Mirrors: platform-orchestrator/routers/auth.py LoginRequest
+    """
+    username: str = Field(...)
+    password: str = Field(...)
+
+
 class UserRegisterRequest(BaseModel):
     username: str = Field(..., min_length=3, max_length=64)
     email: str | None = None
     phone: str | None = None
     password: str = Field(..., min_length=8)
     verify_code: str | None = None
+
+
+class RegisterRequest(BaseModel):
+    """Registration request — platform-orchestrator compatible.
+
+    Mirrors: platform-orchestrator/routers/auth.py RegisterRequest
+    """
+    username: str = Field(..., min_length=3, max_length=50)
+    email: str | None = Field(None)
+    password: str = Field(..., min_length=6, max_length=128)
 
 
 class RefreshRequest(BaseModel):
@@ -65,6 +84,18 @@ class TokenResponse(BaseModel):
     user_id: int | None = None
     username: str | None = None
     role: str = "user"
+
+
+class AuthTokenResponse(BaseModel):
+    """Token response — platform-orchestrator compatible.
+
+    Mirrors: platform-orchestrator/routers/auth.py TokenResponse
+    """
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+    expires_in: int
+    user: dict
 
 
 class UserProfile(BaseModel):
