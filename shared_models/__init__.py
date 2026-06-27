@@ -4,9 +4,9 @@ All modules in the one-stop video generation platform import from this package
 to ensure consistent data structures across process boundaries.
 
 Week 0 Interface Freeze (2026-06-25):
-  - ContentPacket ─ unified pipeline carrier (trendscope→aggregator→splitter→prompt→Story2Video→publish)
-  - SplitResult (with SentenceBlock/SceneSegment) ─ smart-sentence-splitter → prompt-engine
-  - VideoAsset (with ScenePrompt) ─ prompt-engine → Story2Video
+  - ContentPacket — unified pipeline carrier (trendscope→aggregator→splitter→prompt→Story2Video→publish)
+  - SplitResult (with SentenceBlock/SceneSegment) — smart-sentence-splitter → prompt-engine
+  - VideoAsset (with ScenePrompt) — prompt-engine → Story2Video
 """
 
 from __future__ import annotations
@@ -25,6 +25,7 @@ from shared_models.auth import (
 
 # ── Sentence ──────────────────────────────────────────────────────────
 from shared_models.sentence import (
+    EraInfo,
     SceneSegment,
     SentenceBlock,
     SplitResult,
@@ -33,17 +34,20 @@ from shared_models.sentence import (
 
 # ── Content ───────────────────────────────────────────────────────────
 from shared_models.content import (
-    ContentFetchRequest,
-    RewriteConfig,
+    CollectRequest,
+    CollectResult,
+    RewriteRequest,
     RewriteResult,
 )
 
 # ── Prompt ────────────────────────────────────────────────────────────
 from shared_models.prompt import (
+    BatchOptimizeRequest,
     OptimizeRequest,
     OptimizeResult,
     ReverseRequest,
     ReverseResult,
+    RewriteRequest as PromptRewriteRequest,
 )
 
 # ── Pipeline (Week 0 核心契约) ──────────────────────────────────────
@@ -98,19 +102,23 @@ __all__ = [
     "UserRegisterRequest",
     "UserResponse",
     # sentence
+    "EraInfo",
     "SceneSegment",
     "SentenceBlock",
     "SplitResult",
     "SubtitleBlock",
     # content
-    "ContentFetchRequest",
-    "RewriteConfig",
+    "CollectRequest",
+    "CollectResult",
+    "RewriteRequest",
     "RewriteResult",
     # prompt
+    "BatchOptimizeRequest",
     "OptimizeRequest",
     "OptimizeResult",
     "ReverseRequest",
     "ReverseResult",
+    "PromptRewriteRequest",
     # pipeline (Week 0)
     "ContentPacket",
     "PipelineStage",
