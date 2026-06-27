@@ -1,0 +1,749 @@
+{
+  "ContentPacket": {
+    "$defs": {
+      "PipelineStage": {
+        "description": "管道生命周期阶段。",
+        "enum": [
+          "collected",
+          "rewritten",
+          "split",
+          "prompted",
+          "generated",
+          "published",
+          "failed"
+        ],
+        "title": "PipelineStage",
+        "type": "string"
+      }
+    },
+    "additionalProperties": true,
+    "description": "数据管道通用容器，携带内容从采集到发布的完整上下文。\n\n这是管道中最核心的数据契约。每个环节读取 input_data，写入 result_data，\n然后推进 stage。\n\n┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐\n│ COLLECTED│───→│ REWRITTEN│───→│  SPLIT   │───→│ PROMPTED │───→│ GENERATED│\n│ trendscope│   │aggregator│   │ splitter │   │prompt-eng│   │Story2Video│\n└──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘",
+    "properties": {
+      "id": {
+        "description": "Content UUID (pipe-global unique ID)",
+        "title": "Id",
+        "type": "string"
+      },
+      "stage": {
+        "$ref": "#/$defs/PipelineStage",
+        "default": "collected",
+        "description": "当前管道阶段"
+      },
+      "source_platform": {
+        "description": "来源平台代号: baidu/weibo/douyin/…",
+        "title": "Source Platform",
+        "type": "string"
+      },
+      "source_url": {
+        "description": "原文链接",
+        "title": "Source Url",
+        "type": "string"
+      },
+      "source_title": {
+        "description": "原标题",
+        "title": "Source Title",
+        "type": "string"
+      },
+      "source_content": {
+        "description": "原始正文内容",
+        "title": "Source Content",
+        "type": "string"
+      },
+      "source_hot_score": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "热榜热度分（来自 trendscope）",
+        "title": "Source Hot Score"
+      },
+      "collected_at": {
+        "description": "采集时间",
+        "format": "date-time",
+        "title": "Collected At",
+        "type": "string"
+      },
+      "rewritten_title": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "AI 改写标题",
+        "title": "Rewritten Title"
+      },
+      "rewritten_content": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "AI 改写正文",
+        "title": "Rewritten Content"
+      },
+      "rewrite_style": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "改写风格",
+        "title": "Rewrite Style"
+      },
+      "rewritten_at": {
+        "anyOf": [
+          {
+            "format": "date-time",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "改写完成时间",
+        "title": "Rewritten At"
+      },
+      "split_result": {
+        "anyOf": [
+          {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "分句结果 (SplitResult dict)",
+        "title": "Split Result"
+      },
+      "total_scenes": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "分句场景数",
+        "title": "Total Scenes"
+      },
+      "total_duration": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "估算时长(秒)",
+        "title": "Total Duration"
+      },
+      "split_at": {
+        "anyOf": [
+          {
+            "format": "date-time",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "分句完成时间",
+        "title": "Split At"
+      },
+      "optimized_prompts": {
+        "anyOf": [
+          {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "场景级优化提示词列表",
+        "title": "Optimized Prompts"
+      },
+      "prompted_at": {
+        "anyOf": [
+          {
+            "format": "date-time",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "提示词优化完成时间",
+        "title": "Prompted At"
+      },
+      "video_url": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "生成视频链接",
+        "title": "Video Url"
+      },
+      "video_duration": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "视频实际时长(秒)",
+        "title": "Video Duration"
+      },
+      "generated_at": {
+        "anyOf": [
+          {
+            "format": "date-time",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "视频生成完成时间",
+        "title": "Generated At"
+      },
+      "publish_results": {
+        "anyOf": [
+          {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "多平台发布结果 {platform: url}",
+        "title": "Publish Results"
+      },
+      "published_at": {
+        "anyOf": [
+          {
+            "format": "date-time",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "发布完成时间",
+        "title": "Published At"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "失败原因",
+        "title": "Error"
+      },
+      "tags": {
+        "description": "标签列表",
+        "items": {
+          "type": "string"
+        },
+        "title": "Tags",
+        "type": "array"
+      },
+      "metadata": {
+        "additionalProperties": true,
+        "description": "扩展元数据（各环节自由写入）",
+        "title": "Metadata",
+        "type": "object"
+      }
+    },
+    "required": [
+      "id",
+      "source_platform",
+      "source_url",
+      "source_title",
+      "source_content"
+    ],
+    "title": "ContentPacket",
+    "type": "object"
+  },
+  "VideoAsset": {
+    "$defs": {
+      "ScenePrompt": {
+        "additionalProperties": true,
+        "description": "单场景的提示词与字幕配置。",
+        "properties": {
+          "scene_id": {
+            "description": "场景序号 (0-based)",
+            "minimum": 0,
+            "title": "Scene Id",
+            "type": "integer"
+          },
+          "title": {
+            "default": "",
+            "description": "场景标题",
+            "title": "Title",
+            "type": "string"
+          },
+          "text": {
+            "description": "场景原文",
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          },
+          "prompt": {
+            "description": "AI 生成的图片提示词",
+            "minLength": 1,
+            "title": "Prompt",
+            "type": "string"
+          },
+          "subtitle_text": {
+            "default": "",
+            "description": "该场景字幕文本",
+            "title": "Subtitle Text",
+            "type": "string"
+          },
+          "duration": {
+            "default": 5.0,
+            "description": "场景时长(秒)",
+            "exclusiveMinimum": 0,
+            "title": "Duration",
+            "type": "number"
+          },
+          "character": {
+            "default": "",
+            "description": "涉及角色",
+            "title": "Character",
+            "type": "string"
+          },
+          "setting": {
+            "default": "",
+            "description": "场景设定",
+            "title": "Setting",
+            "type": "string"
+          },
+          "mood": {
+            "default": "",
+            "description": "场景情绪",
+            "title": "Mood",
+            "type": "string"
+          }
+        },
+        "required": [
+          "scene_id",
+          "text",
+          "prompt"
+        ],
+        "title": "ScenePrompt",
+        "type": "object"
+      }
+    },
+    "additionalProperties": true,
+    "description": "视频合成任务输入规格 — 作为 Story2Video 的输入契约。\n\n区别于 VideoJob（任务追踪），VideoAsset 只描述\"要生成什么\"，\n不包含任务状态/进度等运行时信息。",
+    "properties": {
+      "id": {
+        "description": "Video asset UUID",
+        "title": "Id",
+        "type": "string"
+      },
+      "title": {
+        "description": "视频标题",
+        "minLength": 1,
+        "title": "Title",
+        "type": "string"
+      },
+      "scenes": {
+        "description": "场景列表（按顺序合成）",
+        "items": {
+          "$ref": "#/$defs/ScenePrompt"
+        },
+        "minItems": 1,
+        "title": "Scenes",
+        "type": "array"
+      },
+      "style": {
+        "default": "写实",
+        "description": "视频风格",
+        "title": "Style",
+        "type": "string"
+      },
+      "platform": {
+        "default": "抖音",
+        "description": "目标平台（影响画幅/时长）",
+        "title": "Platform",
+        "type": "string"
+      },
+      "background_music": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "背景音乐路径/URL",
+        "title": "Background Music"
+      },
+      "voice_type": {
+        "default": "标准女声",
+        "description": "配音音色",
+        "title": "Voice Type",
+        "type": "string"
+      },
+      "subtitle_enabled": {
+        "default": true,
+        "description": "是否生成字幕",
+        "title": "Subtitle Enabled",
+        "type": "boolean"
+      },
+      "resolution": {
+        "default": "1080x1920",
+        "description": "视频分辨率 宽x高",
+        "title": "Resolution",
+        "type": "string"
+      },
+      "fps": {
+        "default": 30,
+        "description": "帧率",
+        "maximum": 60,
+        "minimum": 24,
+        "title": "Fps",
+        "type": "integer"
+      },
+      "metadata": {
+        "additionalProperties": true,
+        "description": "其他元数据",
+        "title": "Metadata",
+        "type": "object"
+      }
+    },
+    "required": [
+      "id",
+      "title",
+      "scenes"
+    ],
+    "title": "VideoAsset",
+    "type": "object"
+  },
+  "SplitResult": {
+    "$defs": {
+      "SceneSegment": {
+        "description": "Scene segment containing multiple sentences and subtitles.\n\nMirrors: splitter.models.scene.SceneSegment (dataclass)",
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "segment_id": {
+            "title": "Segment Id",
+            "type": "integer"
+          },
+          "estimated_duration": {
+            "title": "Estimated Duration",
+            "type": "number"
+          },
+          "target_words": {
+            "title": "Target Words",
+            "type": "integer"
+          },
+          "sentences": {
+            "items": {
+              "$ref": "#/$defs/SentenceBlock"
+            },
+            "title": "Sentences",
+            "type": "array"
+          },
+          "era_info": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Era Info"
+          },
+          "subtitles": {
+            "items": {
+              "$ref": "#/$defs/SubtitleBlock"
+            },
+            "title": "Subtitles",
+            "type": "array"
+          },
+          "characters": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Characters",
+            "type": "array"
+          },
+          "setting": {
+            "default": "",
+            "title": "Setting",
+            "type": "string"
+          },
+          "mood": {
+            "default": "",
+            "title": "Mood",
+            "type": "string"
+          },
+          "story_phase": {
+            "default": "",
+            "title": "Story Phase",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "segment_id",
+          "estimated_duration",
+          "target_words"
+        ],
+        "title": "SceneSegment",
+        "type": "object"
+      },
+      "SentenceBlock": {
+        "description": "Single sentence with full metadata.\n\nMirrors: splitter.models.sentence.SentenceBlock (dataclass)",
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "index": {
+            "title": "Index",
+            "type": "integer"
+          },
+          "char_count": {
+            "default": 0,
+            "title": "Char Count",
+            "type": "integer"
+          },
+          "word_count": {
+            "default": 0,
+            "title": "Word Count",
+            "type": "integer"
+          },
+          "words": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Words",
+            "type": "array"
+          },
+          "pos_tags": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Pos Tags",
+            "type": "array"
+          },
+          "language": {
+            "default": "zh",
+            "title": "Language",
+            "type": "string"
+          },
+          "tier": {
+            "default": "tier3_rule",
+            "title": "Tier",
+            "type": "string"
+          },
+          "confidence": {
+            "default": 1.0,
+            "title": "Confidence",
+            "type": "number"
+          },
+          "is_topic_boundary": {
+            "default": false,
+            "title": "Is Topic Boundary",
+            "type": "boolean"
+          },
+          "topic_depth_score": {
+            "default": 0.0,
+            "title": "Topic Depth Score",
+            "type": "number"
+          },
+          "length_status": {
+            "default": "ok",
+            "title": "Length Status",
+            "type": "string"
+          },
+          "length_strategy_applied": {
+            "default": "none",
+            "title": "Length Strategy Applied",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "index"
+        ],
+        "title": "SentenceBlock",
+        "type": "object"
+      },
+      "SubtitleBlock": {
+        "description": "Subtitle block for video generation.\n\nMirrors: splitter.models.subtitle.SubtitleBlock (dataclass)",
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "display_order": {
+            "title": "Display Order",
+            "type": "integer"
+          },
+          "start_time": {
+            "title": "Start Time",
+            "type": "number"
+          },
+          "duration": {
+            "title": "Duration",
+            "type": "number"
+          },
+          "parent_segment_id": {
+            "title": "Parent Segment Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "text",
+          "display_order",
+          "start_time",
+          "duration",
+          "parent_segment_id"
+        ],
+        "title": "SubtitleBlock",
+        "type": "object"
+      }
+    },
+    "description": "Top-level result from sentence splitter.\n\nMirrors: splitter.models.result.SplitResult (dataclass)",
+    "properties": {
+      "sentences": {
+        "items": {
+          "$ref": "#/$defs/SentenceBlock"
+        },
+        "title": "Sentences",
+        "type": "array"
+      },
+      "scenes": {
+        "items": {
+          "$ref": "#/$defs/SceneSegment"
+        },
+        "title": "Scenes",
+        "type": "array"
+      },
+      "tier_used": {
+        "default": "tier3_rule",
+        "title": "Tier Used",
+        "type": "string"
+      },
+      "language": {
+        "default": "zh",
+        "title": "Language",
+        "type": "string"
+      },
+      "total_duration": {
+        "default": 0.0,
+        "title": "Total Duration",
+        "type": "number"
+      },
+      "total_words": {
+        "default": 0,
+        "title": "Total Words",
+        "type": "integer"
+      },
+      "total_scenes": {
+        "default": 0,
+        "title": "Total Scenes",
+        "type": "integer"
+      },
+      "config_snapshot": {
+        "additionalProperties": true,
+        "title": "Config Snapshot",
+        "type": "object"
+      },
+      "script_analysis": {
+        "anyOf": [
+          {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Script Analysis"
+      },
+      "model_used": {
+        "default": "",
+        "title": "Model Used",
+        "type": "string"
+      },
+      "era_info": {
+        "anyOf": [
+          {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Era Info"
+      }
+    },
+    "title": "SplitResult",
+    "type": "object"
+  }
+}
