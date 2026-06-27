@@ -54,6 +54,30 @@ from shared_models.pipeline import (
     VideoAsset,
 )
 
+# ── LLM Config ───────────────────────────────────────────────────────────
+from shared_models.llm import (
+    LLMGlobalConfig,
+    LLMInvocationRequest,
+    LLMInvocationResponse,
+    LLMProviderConfig,
+    ModelRoute,
+    UserLLMOverride,
+)
+
+# ── Viral Analysis ─────────────────────────────────────────────────────────
+from shared_models.viral import (
+    ArticleViralProfile,
+    ContentStructure,
+    EmotionalTrigger,
+    EngagementMetrics,
+    TitleAnalysis,
+    TitleStructure,
+    TrendingInsights,
+    ViralAnalysisResult,
+    ViralFactor,
+    ViralScoringConfig,
+)
+
 # ── TrendScope ────────────────────────────────────────────────────────
 from shared_models.trendscope.models import (
     HotArticleModel,
@@ -98,4 +122,22 @@ __all__ = [
     "TrendingPipelineItem",
     "TrendingTopicModel",
     "TrendingListResponse",
+    # llm
+    "LLMProviderConfig",
+    "ModelRoute",
+    "UserLLMOverride",
+    "LLMInvocationRequest",
+    "LLMInvocationResponse",
+    "LLMGlobalConfig",
+    # viral
+    "ArticleViralProfile",
+    "ContentStructure",
+    "EmotionalTrigger",
+    "EngagementMetrics",
+    "TitleAnalysis",
+    "TitleStructure",
+    "TrendingInsights",
+    "ViralAnalysisResult",
+    "ViralFactor",
+    "ViralScoringConfig",
 ]
