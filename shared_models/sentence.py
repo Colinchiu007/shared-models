@@ -1,13 +1,29 @@
 """Smart sentence splitter data models — aligned with splitter dataclass output.
 
 These Pydantic models mirror the splitter's dataclass models (SentenceBlock,
-SceneSegment, SubtitleBlock, SplitResult) so that orchestrator and other
+SceneSegment, SubtitleBlock, SplitResult, EraInfo) so that orchestrator and other
 consumers can validate splitter output without importing splitter directly.
 """
 
 from __future__ import annotations
 
+from typing import Optional
+
 from pydantic import BaseModel, Field
+
+
+VALID_ERAS = ("modern", "ancient", "mixed")
+"""Valid era labels — must match splitter.models.era.EraInfo.VALID_ERAS."""
+
+
+class EraInfo(BaseModel):
+    """Era detection result.
+
+    Mirrors: splitter.models.era.EraInfo (dataclass)
+    """
+    era: str = Field(..., description="时代标签: modern / ancient / mixed")
+    confidence: float = Field(..., ge=0.0, le=1.0, description="置信度 0-1")
+    keywords: list[str] = Field(default_factory=list, description="匹配到的关键词列表")
 
 
 class SentenceBlock(BaseModel):
@@ -52,7 +68,7 @@ class SceneSegment(BaseModel):
     estimated_duration: float
     target_words: int
     sentences: list[SentenceBlock] = Field(default_factory=list)
-    era_info: dict | None = None
+    era_info: Optional[EraInfo] = None
     subtitles: list[SubtitleBlock] = Field(default_factory=list)
     characters: list[str] = Field(default_factory=list)
     setting: str = ""
@@ -74,6 +90,3 @@ class SplitResult(BaseModel):
     total_scenes: int = 0
     config_snapshot: dict = Field(default_factory=dict)
     script_analysis: dict | None = None
-    # Backward-compat aliases for consumers that expected the old model:
-    model_used: str = ""
-    era_info: dict | None = None
