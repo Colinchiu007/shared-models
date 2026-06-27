@@ -2,7 +2,14 @@
 
 All modules in the one-stop video generation platform import from this package
 to ensure consistent data structures across process boundaries.
+
+Week 0 Interface Freeze (2026-06-25):
+  - ContentPacket ─ unified pipeline carrier (trendscope→aggregator→splitter→prompt→Story2Video→publish)
+  - SplitResult (with SentenceBlock/SceneSegment) ─ smart-sentence-splitter → prompt-engine
+  - VideoAsset (with ScenePrompt) ─ prompt-engine → Story2Video
 """
+
+from __future__ import annotations
 
 # ── Auth ──────────────────────────────────────────────────────────────
 from shared_models.auth import (
@@ -35,6 +42,14 @@ from shared_models.prompt import (
     ReverseResult,
 )
 
+# ── Pipeline (Week 0 核心契约) ──────────────────────────────────────
+from shared_models.pipeline import (
+    ContentPacket,
+    PipelineStage,
+    ScenePrompt,
+    VideoAsset,
+)
+
 # ── TrendScope ────────────────────────────────────────────────────────
 from shared_models.trendscope.models import (
     HotArticleModel,
@@ -64,6 +79,11 @@ __all__ = [
     "OptimizeResult",
     "ReverseRequest",
     "ReverseResult",
+    # pipeline (Week 0)
+    "ContentPacket",
+    "PipelineStage",
+    "ScenePrompt",
+    "VideoAsset",
     # trendscope
     "HotArticleModel",
     "PlatformModel",
