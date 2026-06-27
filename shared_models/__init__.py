@@ -13,10 +13,14 @@ from __future__ import annotations
 
 # ── Auth ──────────────────────────────────────────────────────────────
 from shared_models.auth import (
+    JWTAuthManager,
     JWTPayload,
+    RefreshRequest,
     TokenResponse,
     UserLoginRequest,
+    UserProfile,
     UserRegisterRequest,
+    UserResponse,
 )
 
 # ── Sentence ──────────────────────────────────────────────────────────
@@ -61,10 +65,14 @@ from shared_models.trendscope.models import (
 
 __all__ = [
     # auth
+    "JWTAuthManager",
     "JWTPayload",
+    "RefreshRequest",
     "TokenResponse",
     "UserLoginRequest",
+    "UserProfile",
     "UserRegisterRequest",
+    "UserResponse",
     # sentence
     "SceneSegment",
     "SentenceBlock",

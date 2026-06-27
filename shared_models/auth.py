@@ -4,14 +4,20 @@ Models imported from src/shared_models/auth.py:
 - RefreshRequest: token refresh request
 - UserResponse: public user profile (safe for API responses)
 - UserProfile: extended profile with quotas and preferences
+- JWTAuthManager: unified JWT + password utility class
 """
 
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Literal, Optional
+from datetime import datetime, timedelta, timezone
+from typing import Any, Dict, Literal, Optional
 
+from jose import JWTError, jwt
+from passlib.context import CryptContext
 from pydantic import BaseModel, EmailStr, Field
+
+# ── Module-level password context (singleton) ─────────────────────────
+_pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class UserLoginRequest(BaseModel):
@@ -92,3 +98,92 @@ class JWTPayload(BaseModel):
     username: str
     role: str = "user"
     exp: int | None = None
+
+
+class JWTAuthManager:
+    """Unified JWT authentication manager.
+
+    Provides token creation/validation and password hashing.
+    Designed to be instantiated once per service with its config,
+    then passed as a dependency.
+
+    Usage:
+        auth = JWTAuthManager(secret_key="...", algorithm="HS256")
+        token = auth.create_access_token({"sub": user_id})
+        payload = auth.decode_token(token)
+        user = auth.get_current_user(credentials)  # FastAPI dependency
+        hashed = JWTAuthManager.hash_password("plain")
+        ok = JWTAuthManager.verify_password("plain", hashed)
+    """
+
+    def __init__(
+        self,
+        secret_key: str,
+        algorithm: str = "HS256",
+        access_token_expire_minutes: int = 120,
+    ):
+        self.secret_key = secret_key
+        self.algorithm = algorithm
+        self.access_token_expire_minutes = access_token_expire_minutes
+
+    # ── Token creation ────────────────────────────────────────────────
+
+    def create_access_token(
+        self, data: Dict[str, Any], expires_delta: Optional[timedelta] = None
+    ) -> str:
+        """Create a JWT access token."""
+        to_encode = data.copy()
+        expire = datetime.now(timezone.utc) + (
+            expires_delta or timedelta(minutes=self.access_token_expire_minutes)
+        )
+        to_encode.update({"exp": expire, "iat": datetime.now(timezone.utc)})
+        return jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
+
+    def create_refresh_token(
+        self, data: Dict[str, Any], expires_delta: Optional[timedelta] = None
+    ) -> str:
+        """Create a refresh token (longer-lived, with type marker)."""
+        to_encode = data.copy()
+        expire = datetime.now(timezone.utc) + (
+            expires_delta or timedelta(days=7)
+        )
+        to_encode.update({"exp": expire, "iat": datetime.now(timezone.utc), "type": "refresh"})
+        return jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
+
+    # ── Token validation ──────────────────────────────────────────────
+
+    def decode_token(self, token: str, verify_exp: bool = True) -> Dict[str, Any]:
+        """Decode and validate a JWT token. Raises ValueError on failure."""
+        try:
+            return jwt.decode(
+                token, self.secret_key,
+                algorithms=[self.algorithm],
+                options={"verify_exp": verify_exp},
+            )
+        except jwt.ExpiredSignatureError:
+            raise ValueError("Token has expired")
+        except JWTError as e:
+            raise ValueError(f"Token validation failed: {e}")
+
+    def get_current_user(self, token: str) -> Dict[str, Any]:
+        """Extract user payload from a Bearer token string.
+
+        Returns the decoded payload dict.
+        Raises ValueError if token is invalid or missing 'sub' claim.
+        """
+        payload = self.decode_token(token)
+        if payload.get("sub") is None:
+            raise ValueError("Token missing 'sub' claim")
+        return payload
+
+    # ── Password utilities (static, no config needed) ─────────────────
+
+    @staticmethod
+    def hash_password(password: str) -> str:
+        """Hash a plain-text password using bcrypt."""
+        return _pwd_context.hash(password)
+
+    @staticmethod
+    def verify_password(plain_password: str, hashed_password: str) -> bool:
+        """Verify a plain-text password against a bcrypt hash."""
+        return _pwd_context.verify(plain_password, hashed_password)
