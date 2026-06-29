@@ -53,14 +53,14 @@ class HotArticleModel(BaseModel):
     comment_count: int = 0
     share_count: int = 0
     # ── Extended engagement metrics (v1.5.0+) ──
-    favor_count: int = 0
-    collected_count: int = 0
-    author_followers: int = 0
-    viral_score: float = 0.0
-    viral_score_norm: float = 0.0
+    favor_count: int = 0          # 收藏数
+    collected_count: int = 0      # 转采数（抖音）
+    author_followers: int = 0     # 作者粉丝数
+    viral_score: float = 0.0      # 归一化爆款潜力分 (0-100)
+    viral_score_norm: float = 0.0 # 按平台归一化 (0-100)
     # ── ──
     publish_at: str = ""
-    snapshot_at: str = ""
+    snapshot_at: str = 
 
 
 class TrendingPipelineItem(BaseModel):
