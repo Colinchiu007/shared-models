@@ -9,6 +9,7 @@ from typing import Optional
 
 
 class PlatformModel(BaseModel):
+    id: int
     code: str
     name: str
     icon_url: str = ""
@@ -17,27 +18,36 @@ class PlatformModel(BaseModel):
 
 
 class TrendingTopicModel(BaseModel):
+    """Trending topic — matches trendscope _serialize_topic() output.
+
+    Mirrors: trendscope/api/services/trending_service.py _serialize_topic()
+    """
     id: int | None = None
-    platform_code: str
+    platform: dict = Field(default_factory=dict, description="Nested platform {code, name, icon_url}")
     rank: int
     title: str
     hot_value: str
     hot_value_norm: float = 0.0
-    topic_url: Optional[str] = None
+    topic_url: str = ""
     category: str = "general"
-    snapshot_at: datetime | None = None
+    snapshot_at: str = ""
 
 
 class HotArticleModel(BaseModel):
+    """Hot article — matches trendscope _serialize_article() output.
+
+    Mirrors: trendscope/api/services/article_service.py _serialize_article()
+    """
     id: int | None = None
-    platform_code: str
-    title: str
-    summary: Optional[str] = None
+    platform: dict = Field(default_factory=dict, description="Nested platform {code, name, icon_url}")
+    title: str = ""
+    summary: str = ""
     content_text: Optional[str] = None
     images: list[dict] = Field(default_factory=list)
-    source_url: str
-    author_name: Optional[str] = None
-    author_avatar: Optional[str] = None
+    video_url: str = ""
+    source_url: str = ""
+    author_name: str = ""
+    author_avatar: str = ""
     read_count: int = 0
     like_count: int = 0
     comment_count: int = 0
@@ -49,23 +59,40 @@ class HotArticleModel(BaseModel):
     viral_score: float = 0.0      # 归一化爆款潜力分 (0-100)
     viral_score_norm: float = 0.0 # 按平台归一化 (0-100)
     # ── ──
-    publish_at: datetime | None = None
-    snapshot_at: datetime | None = None
+    publish_at: str = ""
+    snapshot_at: str = 
 
 
 class TrendingPipelineItem(BaseModel):
     """Item sent from TrendScope to content-aggregator pipeline"""
     source_url: str
     title: str
-    platform_code: str
-    summary: Optional[str] = None
-    author_name: Optional[str] = None
+    platform: dict = Field(default_factory=dict, description="Nested platform {code, name}")
+    summary: str = ""
+    author_name: str = ""
     read_count: int = 0
     like_count: int = 0
 
 
 class TrendingListResponse(BaseModel):
+    """Paginated trending topic list — matches trendscope GET /trending response."""
     items: list[TrendingTopicModel]
     total: int
     page: int = 1
     page_size: int = 20
+
+
+class HotArticleListResponse(BaseModel):
+    """Paginated hot article list — matches trendscope GET /articles response."""
+    items: list[HotArticleModel]
+    total: int
+    page: int = 1
+    page_size: int = 20
+
+
+class ApiResponse(BaseModel):
+    """Standard API response wrapper — matches trendscope {code, data, pagination}."""
+    code: int = 0
+    message: str = "success"
+    data: dict | None = None
+    pagination: dict | None = None

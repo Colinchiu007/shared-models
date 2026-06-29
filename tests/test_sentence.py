@@ -1,6 +1,6 @@
-"""Tests for shared_models.sentence — SentenceBlock, SubtitleBlock, SceneSegment, SplitResult"""
+"""Tests for shared_models.sentence — SentenceBlock, SubtitleBlock, SceneSegment, SplitResult, EraInfo"""
 import pytest
-from shared_models.sentence import SentenceBlock, SubtitleBlock, SceneSegment, SplitResult
+from shared_models.sentence import EraInfo, SentenceBlock, SubtitleBlock, SceneSegment, SplitResult
 
 
 class TestSentenceBlock:
@@ -55,6 +55,29 @@ class TestSubtitleBlock:
         assert sub.parent_segment_id == 1
 
 
+class TestEraInfo:
+    """EraInfo model (newly added — aligned with splitter.models.era.EraInfo)"""
+
+    def test_minimal(self):
+        era = EraInfo(era="modern", confidence=0.9)
+        assert era.era == "modern"
+        assert era.confidence == 0.9
+        assert era.keywords == []
+
+    def test_full(self):
+        era = EraInfo(era="ancient", confidence=0.75, keywords=["唐朝", "古诗"])
+        assert era.era == "ancient"
+        assert len(era.keywords) == 2
+
+    def test_mixed_era(self):
+        era = EraInfo(era="mixed", confidence=0.6)
+        assert era.era == "mixed"
+
+    def test_confidence_range(self):
+        EraInfo(era="modern", confidence=0.0)
+        EraInfo(era="modern", confidence=1.0)
+
+
 class TestSceneSegment:
     """SceneSegment model"""
 
@@ -91,13 +114,14 @@ class TestSceneSegment:
     def test_optional_fields(self):
         segment = SceneSegment(
             text="Scene", segment_id=0, estimated_duration=5.0, target_words=25,
-            era_info={"era": "modern"},
+            era_info=EraInfo(era="modern", confidence=0.85),
             characters=["Alice", "Bob"],
             setting="Office",
             mood="Serious",
             story_phase="climax",
         )
-        assert segment.era_info == {"era": "modern"}
+        assert segment.era_info.era == "modern"
+        assert segment.era_info.confidence == 0.85
         assert len(segment.characters) == 2
         assert segment.setting == "Office"
 
