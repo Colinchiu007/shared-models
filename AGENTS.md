@@ -1,111 +1,121 @@
-# shared-models — 开发规范
+# shared-models — 开发流程规范
 
-> Pydantic v2 共享数据模型的贡献指南。
+> Pydantic v2 统一数据契约层的开发流程与编码约定。AI 工具启动时自动读取。
+
+---
 
 ## 核心原则
 
-1. **唯一事实来源**：shared-models 是管道数据契约的唯一定义。各模块的数据结构变化必须同步到这里。
-2. **向后兼容**：新增字段必须设置合理默认值，不破坏现有消费者。
-3. **`extra="allow"`**：所有模型必须开启此选项，容忍上游模块传回未定义的字段。
-4. **只定义管道间传递的结构**：模块内部使用的私有数据结构不放入这里。
+1. **唯一事实来源**：所有跨模块数据交换必须使用本层定义的 Pydantic v2 模型
+2. **向后兼容**：新增字段必须有默认值，不能删除已有字段
+3. **无业务逻辑**：只放 Pydantic 模型，不放业务逻辑、IO、外部依赖
+4. **TDD**：模型变更必须附测试
+5. **三组 ACK**：shared-models 变更必须三组 Agent 全部 ACK + 协调者批准
 
-## 添加新模型
+## AI 角色分工
 
-### 1. 确定所属域
+| 角色 | 阶段 | 产出物 |
+|------|------|--------|
+| **PM（需求方）** | 需求分析 | 新模型/字段的需求说明、消费者列表 |
+| **架构师** | 技术设计 | 文件位置、命名规则、向后兼容方案 |
+| **开发工程师** | 编码实现 | Pydantic 模型 + 单元测试（TDD） |
+| **QA** | 质量验证 | 测试覆盖：序列化/反序列化/校验器/兼容性 |
+| **CTO** | 代码评审 | 审查兼容性、命名规范、不引入业务逻辑 |
 
-按管道位置确定文件：
-- 管道输入 → `article.py`
-- 分句 → `splitter.py`
-- 提示词 → `prompt.py`
-- 认证 → `auth.py`
-- 任务编排 → `pipeline.py`
-- 发布 → `publish.py`
+## 7 阶段开发流程
 
-如果是全新域，创建新文件（如 `tts.py`）并在 `__init__.py` 中导出。
+### 阶段 1：需求识别（PM）
+谁需要什么数据？哪个模块的消费者受影响？确认：
+- 新增模型还是扩展现有模型
+- 消费者列表（至少 1 个下游模块确认需要）
+- 如果不走 shared-models 的直接后果
 
-### 2. 模型规范
+### 阶段 2：规格定义（PM）
+产出：更新 shared-models PRD 或编写变更说明
+明确：
+- 模型字段清单（名称、类型、必填/可选、默认值、约束）
+- 示例数据和边界值
+- 如果 MAJOR 变更：迁移方案
 
-```python
-from pydantic import BaseModel, Field
+### 阶段 3：技术设计（架构师）
+产出：文件位置、命名规则、校验逻辑
+原则：
+- **选最简单的方案**：能不新增文件就不新增
+- **优先扩展现有模型**，避免创建新模型
+- **extra="allow"** 所有模型必须开启
+- **向后兼容**优先于完美命名
 
-class NewModel(BaseModel):
-    """清晰的文档字符串，说明用途。"""
+### 阶段 4：开发计划（PM）
+把变更拆成 <=2h 的任务：
+- 新增模型 -> 写测试 -> 实现模型 -> 更新 __init__.py 导出
+- 扩展现有模型 -> 更新测试 -> 更新字段
 
-    required_field: str = Field(..., description="必填字段")
-    optional_field: str = Field(default="default", description="可选字段")
-    constrained_field: int = Field(default=5, ge=1, le=10, description="有约束字段")
+### 阶段 5：编码实现（开发 + TDD）
+- 先写测试，再写模型
+- pip install -e . 后所有消费者自动生效
+- 测试验证：序列化 -> 反序列化 -> 字段约束 -> extra="allow" 行为 -> 向后兼容
 
-    # ⚠️ 必须设置
-    model_config = {"extra": "allow"}
+### 阶段 6：代码评审（CTO）
+必检项：
+- 是否包含业务逻辑（禁止）
+- 新增字段是否有默认值（向后兼容）
+- 是否删除或重命名了已有字段（禁止）
+- 字段命名是否符合 snake_case
+- 类型标注是否使用 Python 3.12+ 语法
+- 是否有 model_config = {"extra": "allow"}
+- 校验器逻辑是否合理
+
+### 阶段 7：发布（运维）
+- 更新 CHANGELOG.md（遵循 SemVer）
+- MAJOR 变更：通知所有消费者
+- git tag（vMAJOR.MINOR.PATCH）
+
+## 质量门禁
+
+**规格阶段**：消费者确认 / 向后兼容方案明确
+**设计阶段**：最简单方案 / 字段命名规范
+**开发阶段**：测试全通过 / editable install 验证 / 向后兼容验证
+**Review 阶段**：无业务逻辑 / 三组 Agent ACK
+**发布阶段**：CHANGELOG 更新 / git 已提交并 tag
+
+## TDD 流程
+
+```
+RED   -> 在 tests/ 下写失败测试（验证新模型可序列化/反序列化）
+GREEN -> 实现 Pydantic 模型让测试通过
+REFACTOR -> 重构校验器/字段顺序等，保持测试通过
 ```
 
-### 3. 枚举使用
+## 提交规范
 
-```python
-from enum import Enum
-
-class NewEnum(str, Enum):
-    VALUE_ONE = "value_one"
-    VALUE_TWO = "value_two"
+```
+feat(auth): 添加 RefreshRequest 模型
+fix(content): 修复 RewriteResult model_dump 字段顺序
+docs: 更新 PRD 数据契约分类
+refactor: 统一 field_validator 风格
 ```
 
-枚举值使用小写蛇形命名，便于 JSON 序列化。
+## 文档清单
 
-### 4. 校验器
-
-```python
-from pydantic import field_validator
-
-@field_validator("field_name")
-@classmethod
-def validate_field(cls, v: str) -> str:
-    valid = frozenset({"a", "b", "c"})
-    if v not in valid:
-        raise ValueError(f"must be one of {valid}")
-    return v
-```
-
-### 5. 导出
-
-在 `__init__.py` 中添加导入：
-
-```python
-from shared_models.new_file import NewModel
-
-# 同时在 __all__ 中添加
-__all__ = [..., "NewModel"]
-```
-
-## 命名规则
-
-| 类型 | 规则 | 示例 |
+| 文件 | 路径 | 说明 |
 |------|------|------|
-| 模型类 | PascalCase | `SentenceBlock` |
-| 请求模型 | 后缀 `Request` | `OptimizeRequest` |
-| 响应模型 | 后缀 `Response` 或 `Result` | `ArticleResponse`, `OptimizeResult` |
-| 枚举类 | 后缀 `Type` 或 `Status` | `PlatformType`, `PipelineStatus` |
-| 文件名 | snake_case | `splitter.py`, `pipeline.py` |
-| 字段名 | snake_case | `estimated_duration` |
-
-## 与模块同步
-
-当上游模块的数据结构发生变化时：
-
-1. 在模块仓库中修改
-2. 同步更新 shared-models 中对应的 Pydantic 模型
-3. 在模块中添加 `to_shared_model()` 方法（可选，转换层）
-4. 更新本文档的模型清单
+| AGENTS.md | ./AGENTS.md | 本文件，开发流程规范 |
+| CLAUDE.md | ./CLAUDE.md | 项目上下文和开发命令 |
+| .clinerules | ./.clinerules | 硬约束规则 |
+| PRD.md | ./docs/PRD.md | 产品需求文档 |
+| ARCHITECTURE.md | ./docs/ARCHITECTURE.md | 架构设计文档 |
+| DESIGN.md | ./docs/DESIGN.md | 设计原则和命名规范 |
 
 ## 版本
 
-遵循 [Semantic Versioning](https://semver.org/)：
-- **MAJOR**：删除或重命名字段
-- **MINOR**：新增模型或字段
-- **PATCH**：文档更新、校验逻辑修复
+遵循 Semantic Versioning：
+- MAJOR：删除或重命名字段
+- MINOR：新增模型或字段
+- PATCH：文档更新、校验逻辑修复
 
-## 测试
+## 常用命令
 
 ```bash
-cd /srv/projects/shared-models
-python -m pytest tests/ -v
+pip install -e .
+pytest tests/ -v
 ```
