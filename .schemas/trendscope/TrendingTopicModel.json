@@ -1,0 +1,62 @@
+{
+  "description": "Trending topic — matches trendscope _serialize_topic() output.\n\nMirrors: trendscope/api/services/trending_service.py _serialize_topic()",
+  "properties": {
+    "id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Id"
+    },
+    "platform": {
+      "additionalProperties": true,
+      "description": "Nested platform {code, name, icon_url}",
+      "title": "Platform",
+      "type": "object"
+    },
+    "rank": {
+      "title": "Rank",
+      "type": "integer"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "hot_value": {
+      "title": "Hot Value",
+      "type": "string"
+    },
+    "hot_value_norm": {
+      "default": 0.0,
+      "title": "Hot Value Norm",
+      "type": "number"
+    },
+    "topic_url": {
+      "default": "",
+      "title": "Topic Url",
+      "type": "string"
+    },
+    "category": {
+      "default": "general",
+      "title": "Category",
+      "type": "string"
+    },
+    "snapshot_at": {
+      "default": "",
+      "title": "Snapshot At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "rank",
+    "title",
+    "hot_value"
+  ],
+  "title": "TrendingTopicModel",
+  "type": "object"
+}

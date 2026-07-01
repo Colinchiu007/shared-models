@@ -1,0 +1,151 @@
+{
+  "description": "LLM provider configuration — unified data contract.\n\nHow config is persisted varies by project:\n- **DB-backed** (platform-orchestrator): provider_configs table, Fernet encryption\n- **YAML** (prompt-engine): config.yaml with ${ENV_VAR} resolution\n- **JSON** (auto-exec-mechanism): model_routes.json overrides\n- **env** (platform-orchestrator/config.py): pydantic-settings BaseSettings\n\nThis model is the *in-memory representation* shared across all persistence\nstrategies. API key is in plaintext by design — encryption is the responsibility\nof the storage layer (see orchestrator's Fernet helpers).",
+  "properties": {
+    "name": {
+      "description": "Unique provider identifier, e.g. 'openai', 'doubao', 'minimax'",
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "provider_type": {
+      "description": "Provider protocol type — determines which SDK/client to use",
+      "enum": [
+        "openai_compat",
+        "xfyun",
+        "minimax",
+        "gemini",
+        "doubao",
+        "qwen",
+        "anthropic"
+      ],
+      "title": "Provider Type",
+      "type": "string"
+    },
+    "base_url": {
+      "default": "",
+      "description": "API endpoint base URL (empty = use SDK default)",
+      "title": "Base Url",
+      "type": "string"
+    },
+    "api_key": {
+      "default": "",
+      "description": "API key (plaintext in this model — encrypt at rest)",
+      "title": "Api Key",
+      "type": "string"
+    },
+    "display_name": {
+      "default": "",
+      "description": "Human-readable label for UI display",
+      "title": "Display Name",
+      "type": "string"
+    },
+    "models": {
+      "description": "All available model names for this provider",
+      "items": {
+        "type": "string"
+      },
+      "title": "Models",
+      "type": "array"
+    },
+    "default_model": {
+      "default": "",
+      "description": "Default model used when not explicitly specified",
+      "title": "Default Model",
+      "type": "string"
+    },
+    "temperature": {
+      "default": 0.7,
+      "maximum": 2.0,
+      "minimum": 0.0,
+      "title": "Temperature",
+      "type": "number"
+    },
+    "max_tokens": {
+      "default": 4096,
+      "exclusiveMinimum": 0,
+      "title": "Max Tokens",
+      "type": "integer"
+    },
+    "timeout": {
+      "default": 60,
+      "exclusiveMinimum": 0,
+      "title": "Timeout",
+      "type": "integer"
+    },
+    "top_p": {
+      "default": 1.0,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Top P",
+      "type": "number"
+    },
+    "priority": {
+      "default": 0,
+      "description": "Higher = preferred when multiple providers are equivalent",
+      "title": "Priority",
+      "type": "integer"
+    },
+    "min_tier": {
+      "default": 1,
+      "description": "Minimum user access tier (0 = admin, 1 = all, 2+ = premium)",
+      "title": "Min Tier",
+      "type": "integer"
+    },
+    "enabled": {
+      "default": true,
+      "title": "Enabled",
+      "type": "boolean"
+    },
+    "extra_config": {
+      "additionalProperties": true,
+      "description": "Provider-specific overrides (e.g. organization_id, api_version)",
+      "title": "Extra Config",
+      "type": "object"
+    },
+    "id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "DB record UUID (set by storage layer)",
+      "title": "Id"
+    },
+    "created_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Created At"
+    },
+    "updated_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Updated At"
+    }
+  },
+  "required": [
+    "name",
+    "provider_type"
+  ],
+  "title": "LLMProviderConfig",
+  "type": "object"
+}

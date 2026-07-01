@@ -1,0 +1,77 @@
+{
+  "description": "Configurable weights for viral score computation.\n\nThe viral score is computed as:\n    score = w_linear * linear_component + w_log * log_component\n\nWhere linear_component is a weighted sum of normalized engagement metrics\nand log_component applies log-scaling to reduce outlier effects.",
+  "properties": {
+    "weight_likes": {
+      "default": 0.35,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Weight Likes",
+      "type": "number"
+    },
+    "weight_comments": {
+      "default": 0.3,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Weight Comments",
+      "type": "number"
+    },
+    "weight_shares": {
+      "default": 0.25,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Weight Shares",
+      "type": "number"
+    },
+    "weight_favorites": {
+      "default": 0.1,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Weight Favorites",
+      "type": "number"
+    },
+    "w_linear": {
+      "default": 0.6,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "W Linear",
+      "type": "number"
+    },
+    "w_log": {
+      "default": 0.3,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "W Log",
+      "type": "number"
+    },
+    "w_authority": {
+      "default": 0.1,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "W Authority",
+      "type": "number"
+    },
+    "norm_ceiling": {
+      "default": 100000,
+      "description": "Max raw value for normalization",
+      "title": "Norm Ceiling",
+      "type": "integer"
+    },
+    "log_base": {
+      "default": 10.0,
+      "title": "Log Base",
+      "type": "number"
+    },
+    "platform_ceilings": {
+      "additionalProperties": {
+        "items": {
+          "type": "integer"
+        },
+        "type": "array"
+      },
+      "title": "Platform Ceilings",
+      "type": "object"
+    }
+  },
+  "title": "ViralScoringConfig",
+  "type": "object"
+}

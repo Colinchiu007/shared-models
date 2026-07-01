@@ -1,0 +1,34 @@
+{
+  "description": "URL content collection request.\n\nMirrors: content-aggregator CollectURLRequest",
+  "properties": {
+    "url": {
+      "description": "Source URL to fetch",
+      "title": "Url",
+      "type": "string"
+    },
+    "source": {
+      "default": "manual",
+      "description": "Source identifier (manual/trendscope/rpa)",
+      "title": "Source",
+      "type": "string"
+    },
+    "platform": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Platform code if from trendscope",
+      "title": "Platform"
+    }
+  },
+  "required": [
+    "url"
+  ],
+  "title": "CollectRequest",
+  "type": "object"
+}

@@ -1,0 +1,16 @@
+{
+  "description": "Body text structure patterns.",
+  "enum": [
+    "list",
+    "story",
+    "tutorial",
+    "opinion",
+    "emotional",
+    "news",
+    "review",
+    "guide",
+    "other"
+  ],
+  "title": "ContentStructure",
+  "type": "string"
+}

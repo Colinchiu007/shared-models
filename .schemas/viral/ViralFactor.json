@@ -1,0 +1,51 @@
+{
+  "description": "A single viral factor dimension with score and evidence.",
+  "properties": {
+    "name": {
+      "description": "Factor name, e.g. 'title_structure', 'emotion'",
+      "title": "Name",
+      "type": "string"
+    },
+    "label": {
+      "default": "",
+      "description": "Human-readable label in Chinese",
+      "title": "Label",
+      "type": "string"
+    },
+    "score": {
+      "default": 0.0,
+      "description": "Normalized score 0-1",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Score",
+      "type": "number"
+    },
+    "confidence": {
+      "default": 0.0,
+      "description": "Detection confidence",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "evidence": {
+      "description": "Supporting evidence snippets",
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "details": {
+      "additionalProperties": true,
+      "description": "Extra factor-specific data",
+      "title": "Details",
+      "type": "object"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "ViralFactor",
+  "type": "object"
+}

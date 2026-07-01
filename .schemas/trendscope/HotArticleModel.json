@@ -1,0 +1,130 @@
+{
+  "description": "Hot article — matches trendscope _serialize_article() output.\n\nMirrors: trendscope/api/services/article_service.py _serialize_article()",
+  "properties": {
+    "id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Id"
+    },
+    "platform": {
+      "additionalProperties": true,
+      "description": "Nested platform {code, name, icon_url}",
+      "title": "Platform",
+      "type": "object"
+    },
+    "title": {
+      "default": "",
+      "title": "Title",
+      "type": "string"
+    },
+    "summary": {
+      "default": "",
+      "title": "Summary",
+      "type": "string"
+    },
+    "content_text": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Content Text"
+    },
+    "images": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Images",
+      "type": "array"
+    },
+    "video_url": {
+      "default": "",
+      "title": "Video Url",
+      "type": "string"
+    },
+    "source_url": {
+      "default": "",
+      "title": "Source Url",
+      "type": "string"
+    },
+    "author_name": {
+      "default": "",
+      "title": "Author Name",
+      "type": "string"
+    },
+    "author_avatar": {
+      "default": "",
+      "title": "Author Avatar",
+      "type": "string"
+    },
+    "read_count": {
+      "default": 0,
+      "title": "Read Count",
+      "type": "integer"
+    },
+    "like_count": {
+      "default": 0,
+      "title": "Like Count",
+      "type": "integer"
+    },
+    "comment_count": {
+      "default": 0,
+      "title": "Comment Count",
+      "type": "integer"
+    },
+    "share_count": {
+      "default": 0,
+      "title": "Share Count",
+      "type": "integer"
+    },
+    "favor_count": {
+      "default": 0,
+      "title": "Favor Count",
+      "type": "integer"
+    },
+    "collected_count": {
+      "default": 0,
+      "title": "Collected Count",
+      "type": "integer"
+    },
+    "author_followers": {
+      "default": 0,
+      "title": "Author Followers",
+      "type": "integer"
+    },
+    "viral_score": {
+      "default": 0.0,
+      "title": "Viral Score",
+      "type": "number"
+    },
+    "viral_score_norm": {
+      "default": 0.0,
+      "title": "Viral Score Norm",
+      "type": "number"
+    },
+    "publish_at": {
+      "default": "",
+      "title": "Publish At",
+      "type": "string"
+    },
+    "snapshot_at": {
+      "default": "",
+      "title": "Snapshot At",
+      "type": "string"
+    }
+  },
+  "title": "HotArticleModel",
+  "type": "object"
+}

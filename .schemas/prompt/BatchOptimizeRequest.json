@@ -1,0 +1,116 @@
+{
+  "$defs": {
+    "OptimizeRequest": {
+      "description": "提示词优化请求（管道契约）",
+      "properties": {
+        "prompt": {
+          "description": "原始提示词",
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Prompt",
+          "type": "string"
+        },
+        "platform": {
+          "default": "通用",
+          "description": "目标平台: Midjourney / Stable Diffusion / DALL·E / 通义万相 / 文心一格 / 即梦 / 通用",
+          "title": "Platform",
+          "type": "string"
+        },
+        "style": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "艺术风格",
+          "title": "Style"
+        },
+        "creative_level": {
+          "default": 5,
+          "description": "创意程度 1-10",
+          "maximum": 10,
+          "minimum": 1,
+          "title": "Creative Level",
+          "type": "integer"
+        },
+        "max_length": {
+          "default": 300,
+          "description": "优化结果最大字符数",
+          "maximum": 2000,
+          "minimum": 50,
+          "title": "Max Length",
+          "type": "integer"
+        },
+        "negative_prompt": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "负面提示词",
+          "title": "Negative Prompt"
+        },
+        "num_candidates": {
+          "default": 1,
+          "description": "候选版本数量",
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Num Candidates",
+          "type": "integer"
+        },
+        "auto_detect_style": {
+          "default": true,
+          "description": "当 style=None 时是否自动检测风格",
+          "title": "Auto Detect Style",
+          "type": "boolean"
+        },
+        "context": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "外部注入上下文: synopsis, character, setting 等",
+          "title": "Context"
+        }
+      },
+      "required": [
+        "prompt"
+      ],
+      "title": "OptimizeRequest",
+      "type": "object"
+    }
+  },
+  "description": "批量优化请求",
+  "properties": {
+    "requests": {
+      "description": "优化请求列表",
+      "items": {
+        "$ref": "#/$defs/OptimizeRequest"
+      },
+      "maxItems": 10,
+      "minItems": 1,
+      "title": "Requests",
+      "type": "array"
+    }
+  },
+  "required": [
+    "requests"
+  ],
+  "title": "BatchOptimizeRequest",
+  "type": "object"
+}

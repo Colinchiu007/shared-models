@@ -1,0 +1,67 @@
+{
+  "description": "Raw and normalized engagement metrics.",
+  "properties": {
+    "likes": {
+      "default": 0,
+      "title": "Likes",
+      "type": "integer"
+    },
+    "comments": {
+      "default": 0,
+      "title": "Comments",
+      "type": "integer"
+    },
+    "shares": {
+      "default": 0,
+      "title": "Shares",
+      "type": "integer"
+    },
+    "favorites": {
+      "default": 0,
+      "title": "Favorites",
+      "type": "integer"
+    },
+    "views": {
+      "default": 0,
+      "title": "Views",
+      "type": "integer"
+    },
+    "likes_norm": {
+      "default": 0.0,
+      "title": "Likes Norm",
+      "type": "number"
+    },
+    "comments_norm": {
+      "default": 0.0,
+      "title": "Comments Norm",
+      "type": "number"
+    },
+    "shares_norm": {
+      "default": 0.0,
+      "title": "Shares Norm",
+      "type": "number"
+    },
+    "favorites_norm": {
+      "default": 0.0,
+      "title": "Favorites Norm",
+      "type": "number"
+    },
+    "total_engagement": {
+      "default": 0,
+      "title": "Total Engagement",
+      "type": "integer"
+    },
+    "engagement_rate": {
+      "default": 0.0,
+      "title": "Engagement Rate",
+      "type": "number"
+    },
+    "viral_score": {
+      "default": 0.0,
+      "title": "Viral Score",
+      "type": "number"
+    }
+  },
+  "title": "EngagementMetrics",
+  "type": "object"
+}

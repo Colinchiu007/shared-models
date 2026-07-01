@@ -1,0 +1,78 @@
+{
+  "description": "Single sentence with full metadata.\n\nMirrors: splitter.models.sentence.SentenceBlock (dataclass)",
+  "properties": {
+    "text": {
+      "title": "Text",
+      "type": "string"
+    },
+    "index": {
+      "title": "Index",
+      "type": "integer"
+    },
+    "char_count": {
+      "default": 0,
+      "title": "Char Count",
+      "type": "integer"
+    },
+    "word_count": {
+      "default": 0,
+      "title": "Word Count",
+      "type": "integer"
+    },
+    "words": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Words",
+      "type": "array"
+    },
+    "pos_tags": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Pos Tags",
+      "type": "array"
+    },
+    "language": {
+      "default": "zh",
+      "title": "Language",
+      "type": "string"
+    },
+    "tier": {
+      "default": "tier3_rule",
+      "title": "Tier",
+      "type": "string"
+    },
+    "confidence": {
+      "default": 1.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "is_topic_boundary": {
+      "default": false,
+      "title": "Is Topic Boundary",
+      "type": "boolean"
+    },
+    "topic_depth_score": {
+      "default": 0.0,
+      "title": "Topic Depth Score",
+      "type": "number"
+    },
+    "length_status": {
+      "default": "ok",
+      "title": "Length Status",
+      "type": "string"
+    },
+    "length_strategy_applied": {
+      "default": "none",
+      "title": "Length Strategy Applied",
+      "type": "string"
+    }
+  },
+  "required": [
+    "text",
+    "index"
+  ],
+  "title": "SentenceBlock",
+  "type": "object"
+}

@@ -1,0 +1,156 @@
+{
+  "description": "Standardized LLM invocation request.\n\nUsed across prompt-engine, orchestrator, and any service that needs to call an LLM.\nReplaces each project's ad-hoc request format with a shared contract.\n\nThe request can be resolved in two ways:\n1. **Direct**: specify ``provider`` + ``model`` explicitly\n2. **Routed**: specify ``category`` + optional ``user_uuid``, let the router decide",
+  "properties": {
+    "messages": {
+      "description": "Chat messages in OpenAI format: [{'role': 'user', 'content': ...}]",
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Messages",
+      "type": "array"
+    },
+    "system_prompt": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Optional system message prepended to messages",
+      "title": "System Prompt"
+    },
+    "provider": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Target provider (matches LLMProviderConfig.name)",
+      "title": "Provider"
+    },
+    "model": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Target model name",
+      "title": "Model"
+    },
+    "temperature": {
+      "anyOf": [
+        {
+          "maximum": 2.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Temperature"
+    },
+    "max_tokens": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Max Tokens"
+    },
+    "top_p": {
+      "anyOf": [
+        {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Top P"
+    },
+    "user_uuid": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "For user-level API key override",
+      "title": "User Uuid"
+    },
+    "category": {
+      "anyOf": [
+        {
+          "enum": [
+            "ultrabrain",
+            "visual-engineering",
+            "deep",
+            "creative",
+            "quick"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Route category for auto-selection (mutually exclusive with provider)",
+      "title": "Category"
+    },
+    "min_tier": {
+      "default": 1,
+      "description": "Caller's access tier for routing",
+      "title": "Min Tier",
+      "type": "integer"
+    },
+    "stream": {
+      "default": false,
+      "title": "Stream",
+      "type": "boolean"
+    },
+    "stream_callback_url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "POST callback URL for streaming chunks",
+      "title": "Stream Callback Url"
+    }
+  },
+  "required": [
+    "messages"
+  ],
+  "title": "LLMInvocationRequest",
+  "type": "object"
+}

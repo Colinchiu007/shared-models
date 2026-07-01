@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="shared-models",
-    version="0.1.0",
+    version="0.2.0",
     description="Unified Pydantic v2 data models shared across the one-stop video generation platform",
     packages=find_packages(),
     python_requires=">=3.10",

@@ -1,0 +1,44 @@
+{
+  "description": "AI rewrite result.\n\nMirrors: content-aggregator RewriteResponse (with added title)",
+  "properties": {
+    "rewritten_title": {
+      "default": "",
+      "description": "AI-optimized title",
+      "title": "Rewritten Title",
+      "type": "string"
+    },
+    "rewritten_content": {
+      "description": "Rewritten content",
+      "title": "Rewritten Content",
+      "type": "string"
+    },
+    "style": {
+      "default": "default",
+      "description": "Applied rewrite style",
+      "title": "Style",
+      "type": "string"
+    },
+    "word_count": {
+      "default": 0,
+      "description": "Word count of rewritten content",
+      "title": "Word Count",
+      "type": "integer"
+    },
+    "model_used": {
+      "default": "",
+      "description": "LLM model used",
+      "title": "Model Used",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "rewritten_content"
+  ],
+  "title": "RewriteResult",
+  "type": "object"
+}

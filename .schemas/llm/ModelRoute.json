@@ -1,0 +1,95 @@
+{
+  "description": "Category-based model routing rule.\n\nMaps a semantic task category to a (provider, model) pair.\nInspired by auto-exec-mechanism's routing table and oh-my-openagent patterns.\n\nExample:\n    route = ModelRoute(\n        category=\"creative\",\n        provider=\"openai\",\n        model=\"gpt-4o\",\n        fallback_model=\"gpt-4o-mini\",\n        keywords=[\"write\", \"draft\", \"copy\", \"写作\", \"文案\"],\n        description=\"Creative writing / copy / content generation\",\n        cost_level=\"medium\",\n    )",
+  "properties": {
+    "category": {
+      "description": "Task classification category",
+      "enum": [
+        "ultrabrain",
+        "visual-engineering",
+        "deep",
+        "creative",
+        "quick"
+      ],
+      "title": "Category",
+      "type": "string"
+    },
+    "provider": {
+      "description": "Target provider name (refers to LLMProviderConfig.name)",
+      "title": "Provider",
+      "type": "string"
+    },
+    "model": {
+      "description": "Target model to use for this category",
+      "title": "Model",
+      "type": "string"
+    },
+    "fallback_model": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Fallback model when primary is unavailable",
+      "title": "Fallback Model"
+    },
+    "keywords": {
+      "description": "Keywords used by the classifier to auto-assign categories",
+      "items": {
+        "type": "string"
+      },
+      "title": "Keywords",
+      "type": "array"
+    },
+    "description": {
+      "default": "",
+      "description": "Human-readable description of what this category handles",
+      "title": "Description",
+      "type": "string"
+    },
+    "cost_level": {
+      "default": "medium",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "title": "Cost Level",
+      "type": "string"
+    },
+    "priority": {
+      "default": 0,
+      "title": "Priority",
+      "type": "integer"
+    },
+    "usage_count": {
+      "default": 0,
+      "description": "How many times this route was hit",
+      "title": "Usage Count",
+      "type": "integer"
+    },
+    "last_used_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Last Used At"
+    }
+  },
+  "required": [
+    "category",
+    "provider",
+    "model"
+  ],
+  "title": "ModelRoute",
+  "type": "object"
+}

@@ -1,0 +1,16 @@
+{
+  "additionalProperties": true,
+  "description": "Token refresh request.",
+  "properties": {
+    "refresh_token": {
+      "description": "Refresh token",
+      "title": "Refresh Token",
+      "type": "string"
+    }
+  },
+  "required": [
+    "refresh_token"
+  ],
+  "title": "RefreshRequest",
+  "type": "object"
+}

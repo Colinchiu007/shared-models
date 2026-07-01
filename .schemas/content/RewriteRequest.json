@@ -1,0 +1,53 @@
+{
+  "description": "AI rewrite request (pipeline contract — uses content directly, not article_id).\n\nMirrors: content-aggregator RewriteRequest",
+  "properties": {
+    "content": {
+      "description": "Source content to rewrite",
+      "minLength": 1,
+      "title": "Content",
+      "type": "string"
+    },
+    "title": {
+      "default": "",
+      "description": "Original title",
+      "title": "Title",
+      "type": "string"
+    },
+    "style": {
+      "default": "default",
+      "description": "Rewrite style: casual / formal / eye-catching / deep-analysis",
+      "title": "Style",
+      "type": "string"
+    },
+    "length": {
+      "default": "medium",
+      "description": "Length strategy: keep / compress / expand / short / medium / long",
+      "title": "Length",
+      "type": "string"
+    },
+    "target_platform": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Target platform for style tuning",
+      "title": "Target Platform"
+    },
+    "seo_optimize": {
+      "default": false,
+      "description": "Enable SEO optimization",
+      "title": "Seo Optimize",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "content"
+  ],
+  "title": "RewriteRequest",
+  "type": "object"
+}

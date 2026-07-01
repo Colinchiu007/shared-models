@@ -1,0 +1,58 @@
+{
+  "description": "Standardized LLM invocation response.",
+  "properties": {
+    "content": {
+      "description": "Generated text content",
+      "title": "Content",
+      "type": "string"
+    },
+    "model": {
+      "default": "",
+      "description": "Model that generated the response",
+      "title": "Model",
+      "type": "string"
+    },
+    "provider": {
+      "default": "",
+      "description": "Provider that served the request",
+      "title": "Provider",
+      "type": "string"
+    },
+    "finish_reason": {
+      "default": "stop",
+      "description": "stop / length / content_filter / error",
+      "title": "Finish Reason",
+      "type": "string"
+    },
+    "input_tokens": {
+      "default": 0,
+      "title": "Input Tokens",
+      "type": "integer"
+    },
+    "output_tokens": {
+      "default": 0,
+      "title": "Output Tokens",
+      "type": "integer"
+    },
+    "total_tokens": {
+      "default": 0,
+      "title": "Total Tokens",
+      "type": "integer"
+    },
+    "latency_ms": {
+      "default": 0,
+      "title": "Latency Ms",
+      "type": "integer"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "content"
+  ],
+  "title": "LLMInvocationResponse",
+  "type": "object"
+}

@@ -1,0 +1,17 @@
+{
+  "description": "Emotional trigger categories for content.",
+  "enum": [
+    "curiosity",
+    "surprise",
+    "controversy",
+    "empathy",
+    "anxiety",
+    "fear",
+    "joy",
+    "anger",
+    "inspiration",
+    "none"
+  ],
+  "title": "EmotionalTrigger",
+  "type": "string"
+}

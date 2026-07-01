@@ -1,0 +1,105 @@
+{
+  "$defs": {
+    "EmotionalTrigger": {
+      "description": "Emotional trigger categories for content.",
+      "enum": [
+        "curiosity",
+        "surprise",
+        "controversy",
+        "empathy",
+        "anxiety",
+        "fear",
+        "joy",
+        "anger",
+        "inspiration",
+        "none"
+      ],
+      "title": "EmotionalTrigger",
+      "type": "string"
+    },
+    "TitleStructure": {
+      "description": "Classified title structure patterns.",
+      "enum": [
+        "question",
+        "numbered_list",
+        "how_to",
+        "comparison",
+        "suspense",
+        "direct",
+        "controversy",
+        "story",
+        "negative",
+        "command",
+        "curiosity_gap",
+        "timely",
+        "other"
+      ],
+      "title": "TitleStructure",
+      "type": "string"
+    }
+  },
+  "description": "Extracted title structure and pattern analysis.",
+  "properties": {
+    "title": {
+      "description": "Original title text",
+      "title": "Title",
+      "type": "string"
+    },
+    "structure": {
+      "$ref": "#/$defs/TitleStructure",
+      "default": "other"
+    },
+    "length": {
+      "default": 0,
+      "description": "Character count",
+      "title": "Length",
+      "type": "integer"
+    },
+    "word_count": {
+      "default": 0,
+      "title": "Word Count",
+      "type": "integer"
+    },
+    "has_numbers": {
+      "default": false,
+      "title": "Has Numbers",
+      "type": "boolean"
+    },
+    "has_questions": {
+      "default": false,
+      "title": "Has Questions",
+      "type": "boolean"
+    },
+    "has_emojis": {
+      "default": false,
+      "title": "Has Emojis",
+      "type": "boolean"
+    },
+    "has_colon": {
+      "default": false,
+      "title": "Has Colon",
+      "type": "boolean"
+    },
+    "has_power_words": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Has Power Words",
+      "type": "array"
+    },
+    "emotion": {
+      "$ref": "#/$defs/EmotionalTrigger",
+      "default": "none"
+    },
+    "confidence": {
+      "default": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "title": "TitleAnalysis",
+  "type": "object"
+}

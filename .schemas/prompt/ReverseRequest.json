@@ -1,0 +1,40 @@
+{
+  "description": "图片逆向工程请求（管道契约）",
+  "properties": {
+    "image_url": {
+      "description": "图片 URL",
+      "title": "Image Url",
+      "type": "string"
+    },
+    "platform": {
+      "default": "通用",
+      "description": "目标平台",
+      "title": "Platform",
+      "type": "string"
+    },
+    "style": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "艺术风格",
+      "title": "Style"
+    },
+    "detail": {
+      "default": "auto",
+      "description": "分析详细度: low / auto / high",
+      "title": "Detail",
+      "type": "string"
+    }
+  },
+  "required": [
+    "image_url"
+  ],
+  "title": "ReverseRequest",
+  "type": "object"
+}

@@ -1,0 +1,73 @@
+{
+  "description": "提示词优化结果（管道契约）",
+  "properties": {
+    "optimized_prompt": {
+      "description": "优化后的提示词",
+      "title": "Optimized Prompt",
+      "type": "string"
+    },
+    "platform": {
+      "description": "实际使用的平台策略",
+      "title": "Platform",
+      "type": "string"
+    },
+    "style": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "使用的风格",
+      "title": "Style"
+    },
+    "model_used": {
+      "default": "",
+      "description": "LLM 模型名称",
+      "title": "Model Used",
+      "type": "string"
+    },
+    "tokens_used": {
+      "default": 0,
+      "description": "消耗的 token 数",
+      "title": "Tokens Used",
+      "type": "integer"
+    },
+    "duration_ms": {
+      "default": 0.0,
+      "description": "优化耗时（毫秒）",
+      "title": "Duration Ms",
+      "type": "number"
+    },
+    "candidates": {
+      "description": "多候选版本",
+      "items": {
+        "type": "string"
+      },
+      "title": "Candidates",
+      "type": "array"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "错误信息",
+      "title": "Error"
+    }
+  },
+  "required": [
+    "optimized_prompt",
+    "platform"
+  ],
+  "title": "OptimizeResult",
+  "type": "object"
+}

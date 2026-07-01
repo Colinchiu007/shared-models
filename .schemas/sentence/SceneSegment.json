@@ -1,0 +1,221 @@
+{
+  "$defs": {
+    "EraInfo": {
+      "description": "Era detection result.\n\nMirrors: splitter.models.era.EraInfo (dataclass)",
+      "properties": {
+        "era": {
+          "description": "时代标签: modern / ancient / mixed",
+          "title": "Era",
+          "type": "string"
+        },
+        "confidence": {
+          "description": "置信度 0-1",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "keywords": {
+          "description": "匹配到的关键词列表",
+          "items": {
+            "type": "string"
+          },
+          "title": "Keywords",
+          "type": "array"
+        }
+      },
+      "required": [
+        "era",
+        "confidence"
+      ],
+      "title": "EraInfo",
+      "type": "object"
+    },
+    "SentenceBlock": {
+      "description": "Single sentence with full metadata.\n\nMirrors: splitter.models.sentence.SentenceBlock (dataclass)",
+      "properties": {
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "char_count": {
+          "default": 0,
+          "title": "Char Count",
+          "type": "integer"
+        },
+        "word_count": {
+          "default": 0,
+          "title": "Word Count",
+          "type": "integer"
+        },
+        "words": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Words",
+          "type": "array"
+        },
+        "pos_tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Pos Tags",
+          "type": "array"
+        },
+        "language": {
+          "default": "zh",
+          "title": "Language",
+          "type": "string"
+        },
+        "tier": {
+          "default": "tier3_rule",
+          "title": "Tier",
+          "type": "string"
+        },
+        "confidence": {
+          "default": 1.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "is_topic_boundary": {
+          "default": false,
+          "title": "Is Topic Boundary",
+          "type": "boolean"
+        },
+        "topic_depth_score": {
+          "default": 0.0,
+          "title": "Topic Depth Score",
+          "type": "number"
+        },
+        "length_status": {
+          "default": "ok",
+          "title": "Length Status",
+          "type": "string"
+        },
+        "length_strategy_applied": {
+          "default": "none",
+          "title": "Length Strategy Applied",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text",
+        "index"
+      ],
+      "title": "SentenceBlock",
+      "type": "object"
+    },
+    "SubtitleBlock": {
+      "description": "Subtitle block for video generation.\n\nMirrors: splitter.models.subtitle.SubtitleBlock (dataclass)",
+      "properties": {
+        "text": {
+          "title": "Text",
+          "type": "string"
+        },
+        "display_order": {
+          "title": "Display Order",
+          "type": "integer"
+        },
+        "start_time": {
+          "title": "Start Time",
+          "type": "number"
+        },
+        "duration": {
+          "title": "Duration",
+          "type": "number"
+        },
+        "parent_segment_id": {
+          "title": "Parent Segment Id",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "text",
+        "display_order",
+        "start_time",
+        "duration",
+        "parent_segment_id"
+      ],
+      "title": "SubtitleBlock",
+      "type": "object"
+    }
+  },
+  "description": "Scene segment containing multiple sentences and subtitles.\n\nMirrors: splitter.models.scene.SceneSegment (dataclass)",
+  "properties": {
+    "text": {
+      "title": "Text",
+      "type": "string"
+    },
+    "segment_id": {
+      "title": "Segment Id",
+      "type": "integer"
+    },
+    "estimated_duration": {
+      "title": "Estimated Duration",
+      "type": "number"
+    },
+    "target_words": {
+      "title": "Target Words",
+      "type": "integer"
+    },
+    "sentences": {
+      "items": {
+        "$ref": "#/$defs/SentenceBlock"
+      },
+      "title": "Sentences",
+      "type": "array"
+    },
+    "era_info": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EraInfo"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "subtitles": {
+      "items": {
+        "$ref": "#/$defs/SubtitleBlock"
+      },
+      "title": "Subtitles",
+      "type": "array"
+    },
+    "characters": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Characters",
+      "type": "array"
+    },
+    "setting": {
+      "default": "",
+      "title": "Setting",
+      "type": "string"
+    },
+    "mood": {
+      "default": "",
+      "title": "Mood",
+      "type": "string"
+    },
+    "story_phase": {
+      "default": "",
+      "title": "Story Phase",
+      "type": "string"
+    }
+  },
+  "required": [
+    "text",
+    "segment_id",
+    "estimated_duration",
+    "target_words"
+  ],
+  "title": "SceneSegment",
+  "type": "object"
+}

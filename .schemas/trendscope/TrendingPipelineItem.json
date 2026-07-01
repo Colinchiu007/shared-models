@@ -1,0 +1,45 @@
+{
+  "description": "Item sent from TrendScope to content-aggregator pipeline",
+  "properties": {
+    "source_url": {
+      "title": "Source Url",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "platform": {
+      "additionalProperties": true,
+      "description": "Nested platform {code, name}",
+      "title": "Platform",
+      "type": "object"
+    },
+    "summary": {
+      "default": "",
+      "title": "Summary",
+      "type": "string"
+    },
+    "author_name": {
+      "default": "",
+      "title": "Author Name",
+      "type": "string"
+    },
+    "read_count": {
+      "default": 0,
+      "title": "Read Count",
+      "type": "integer"
+    },
+    "like_count": {
+      "default": 0,
+      "title": "Like Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "source_url",
+    "title"
+  ],
+  "title": "TrendingPipelineItem",
+  "type": "object"
+}

@@ -1,0 +1,27 @@
+{
+  "properties": {
+    "account": {
+      "description": "Username, email, or phone",
+      "minLength": 1,
+      "title": "Account",
+      "type": "string"
+    },
+    "password": {
+      "minLength": 1,
+      "title": "Password",
+      "type": "string"
+    },
+    "login_method": {
+      "default": "password",
+      "pattern": "^(password|sms)$",
+      "title": "Login Method",
+      "type": "string"
+    }
+  },
+  "required": [
+    "account",
+    "password"
+  ],
+  "title": "UserLoginRequest",
+  "type": "object"
+}

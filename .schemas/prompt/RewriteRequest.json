@@ -1,0 +1,31 @@
+{
+  "description": "Prompt 扩写请求",
+  "properties": {
+    "prompt": {
+      "description": "原始简短描述",
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Prompt",
+      "type": "string"
+    },
+    "platform": {
+      "default": "通用",
+      "description": "目标平台",
+      "title": "Platform",
+      "type": "string"
+    },
+    "max_length": {
+      "default": 500,
+      "description": "输出最大字符数",
+      "maximum": 2000,
+      "minimum": 50,
+      "title": "Max Length",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "prompt"
+  ],
+  "title": "RewriteRequest",
+  "type": "object"
+}

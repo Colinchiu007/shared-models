@@ -1,0 +1,59 @@
+{
+  "description": "Aggregated platform-level trending insights.",
+  "properties": {
+    "platform_code": {
+      "default": "",
+      "title": "Platform Code",
+      "type": "string"
+    },
+    "snapshot_at": {
+      "format": "date-time",
+      "title": "Snapshot At",
+      "type": "string"
+    },
+    "total_items": {
+      "default": 0,
+      "title": "Total Items",
+      "type": "integer"
+    },
+    "category_distribution": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Category Distribution",
+      "type": "object"
+    },
+    "title_structure_distribution": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Title Structure Distribution",
+      "type": "object"
+    },
+    "emotion_distribution": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Emotion Distribution",
+      "type": "object"
+    },
+    "top_topics": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Top Topics",
+      "type": "array"
+    },
+    "rising_keywords": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Rising Keywords",
+      "type": "array"
+    }
+  },
+  "title": "TrendingInsights",
+  "type": "object"
+}

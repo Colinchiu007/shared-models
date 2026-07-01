@@ -1,0 +1,38 @@
+{
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "integer"
+    },
+    "code": {
+      "title": "Code",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "icon_url": {
+      "default": "",
+      "title": "Icon Url",
+      "type": "string"
+    },
+    "category": {
+      "default": "general",
+      "title": "Category",
+      "type": "string"
+    },
+    "is_active": {
+      "default": true,
+      "title": "Is Active",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "code",
+    "name"
+  ],
+  "title": "PlatformModel",
+  "type": "object"
+}

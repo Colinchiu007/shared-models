@@ -1,0 +1,160 @@
+{
+  "$defs": {
+    "ScenePrompt": {
+      "additionalProperties": true,
+      "description": "单场景的提示词与字幕配置。",
+      "properties": {
+        "scene_id": {
+          "description": "场景序号 (0-based)",
+          "minimum": 0,
+          "title": "Scene Id",
+          "type": "integer"
+        },
+        "title": {
+          "default": "",
+          "description": "场景标题",
+          "title": "Title",
+          "type": "string"
+        },
+        "text": {
+          "description": "场景原文",
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "prompt": {
+          "description": "AI 生成的图片提示词",
+          "minLength": 1,
+          "title": "Prompt",
+          "type": "string"
+        },
+        "subtitle_text": {
+          "default": "",
+          "description": "该场景字幕文本",
+          "title": "Subtitle Text",
+          "type": "string"
+        },
+        "duration": {
+          "default": 5.0,
+          "description": "场景时长(秒)",
+          "exclusiveMinimum": 0,
+          "title": "Duration",
+          "type": "number"
+        },
+        "character": {
+          "default": "",
+          "description": "涉及角色",
+          "title": "Character",
+          "type": "string"
+        },
+        "setting": {
+          "default": "",
+          "description": "场景设定",
+          "title": "Setting",
+          "type": "string"
+        },
+        "mood": {
+          "default": "",
+          "description": "场景情绪",
+          "title": "Mood",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scene_id",
+        "text",
+        "prompt"
+      ],
+      "title": "ScenePrompt",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "视频合成任务输入规格 — 作为 Story2Video 的输入契约。\n\n区别于 VideoJob（任务追踪），VideoAsset 只描述\"要生成什么\"，\n不包含任务状态/进度等运行时信息。",
+  "properties": {
+    "id": {
+      "description": "Video asset UUID",
+      "title": "Id",
+      "type": "string"
+    },
+    "title": {
+      "description": "视频标题",
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "scenes": {
+      "description": "场景列表（按顺序合成）",
+      "items": {
+        "$ref": "#/$defs/ScenePrompt"
+      },
+      "minItems": 1,
+      "title": "Scenes",
+      "type": "array"
+    },
+    "style": {
+      "default": "写实",
+      "description": "视频风格",
+      "title": "Style",
+      "type": "string"
+    },
+    "platform": {
+      "default": "抖音",
+      "description": "目标平台（影响画幅/时长）",
+      "title": "Platform",
+      "type": "string"
+    },
+    "background_music": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "背景音乐路径/URL",
+      "title": "Background Music"
+    },
+    "voice_type": {
+      "default": "标准女声",
+      "description": "配音音色",
+      "title": "Voice Type",
+      "type": "string"
+    },
+    "subtitle_enabled": {
+      "default": true,
+      "description": "是否生成字幕",
+      "title": "Subtitle Enabled",
+      "type": "boolean"
+    },
+    "resolution": {
+      "default": "1080x1920",
+      "description": "视频分辨率 宽x高",
+      "title": "Resolution",
+      "type": "string"
+    },
+    "fps": {
+      "default": 30,
+      "description": "帧率",
+      "maximum": 60,
+      "minimum": 24,
+      "title": "Fps",
+      "type": "integer"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "description": "其他元数据",
+      "title": "Metadata",
+      "type": "object"
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "scenes"
+  ],
+  "title": "VideoAsset",
+  "type": "object"
+}

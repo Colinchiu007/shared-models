@@ -1,0 +1,79 @@
+{
+  "description": "逆向工程结果（管道契约）",
+  "properties": {
+    "image_url": {
+      "description": "图片 URL",
+      "title": "Image Url",
+      "type": "string"
+    },
+    "prompt": {
+      "description": "生成的提示词",
+      "title": "Prompt",
+      "type": "string"
+    },
+    "platform": {
+      "description": "目标平台",
+      "title": "Platform",
+      "type": "string"
+    },
+    "style": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "艺术风格",
+      "title": "Style"
+    },
+    "model_used": {
+      "default": "",
+      "description": "LLM 模型名称",
+      "title": "Model Used",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "description": "图片描述（纯文本）",
+      "title": "Description",
+      "type": "string"
+    },
+    "duration_ms": {
+      "default": 0.0,
+      "description": "耗时",
+      "title": "Duration Ms",
+      "type": "number"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "错误信息",
+      "title": "Error"
+    },
+    "confidence": {
+      "default": 0.0,
+      "description": "置信度",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    }
+  },
+  "required": [
+    "image_url",
+    "prompt",
+    "platform"
+  ],
+  "title": "ReverseResult",
+  "type": "object"
+}

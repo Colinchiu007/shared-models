@@ -1,0 +1,385 @@
+{
+  "$defs": {
+    "LLMProviderConfig": {
+      "description": "LLM provider configuration — unified data contract.\n\nHow config is persisted varies by project:\n- **DB-backed** (platform-orchestrator): provider_configs table, Fernet encryption\n- **YAML** (prompt-engine): config.yaml with ${ENV_VAR} resolution\n- **JSON** (auto-exec-mechanism): model_routes.json overrides\n- **env** (platform-orchestrator/config.py): pydantic-settings BaseSettings\n\nThis model is the *in-memory representation* shared across all persistence\nstrategies. API key is in plaintext by design — encryption is the responsibility\nof the storage layer (see orchestrator's Fernet helpers).",
+      "properties": {
+        "name": {
+          "description": "Unique provider identifier, e.g. 'openai', 'doubao', 'minimax'",
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "provider_type": {
+          "description": "Provider protocol type — determines which SDK/client to use",
+          "enum": [
+            "openai_compat",
+            "xfyun",
+            "minimax",
+            "gemini",
+            "doubao",
+            "qwen",
+            "anthropic"
+          ],
+          "title": "Provider Type",
+          "type": "string"
+        },
+        "base_url": {
+          "default": "",
+          "description": "API endpoint base URL (empty = use SDK default)",
+          "title": "Base Url",
+          "type": "string"
+        },
+        "api_key": {
+          "default": "",
+          "description": "API key (plaintext in this model — encrypt at rest)",
+          "title": "Api Key",
+          "type": "string"
+        },
+        "display_name": {
+          "default": "",
+          "description": "Human-readable label for UI display",
+          "title": "Display Name",
+          "type": "string"
+        },
+        "models": {
+          "description": "All available model names for this provider",
+          "items": {
+            "type": "string"
+          },
+          "title": "Models",
+          "type": "array"
+        },
+        "default_model": {
+          "default": "",
+          "description": "Default model used when not explicitly specified",
+          "title": "Default Model",
+          "type": "string"
+        },
+        "temperature": {
+          "default": 0.7,
+          "maximum": 2.0,
+          "minimum": 0.0,
+          "title": "Temperature",
+          "type": "number"
+        },
+        "max_tokens": {
+          "default": 4096,
+          "exclusiveMinimum": 0,
+          "title": "Max Tokens",
+          "type": "integer"
+        },
+        "timeout": {
+          "default": 60,
+          "exclusiveMinimum": 0,
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "top_p": {
+          "default": 1.0,
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Top P",
+          "type": "number"
+        },
+        "priority": {
+          "default": 0,
+          "description": "Higher = preferred when multiple providers are equivalent",
+          "title": "Priority",
+          "type": "integer"
+        },
+        "min_tier": {
+          "default": 1,
+          "description": "Minimum user access tier (0 = admin, 1 = all, 2+ = premium)",
+          "title": "Min Tier",
+          "type": "integer"
+        },
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "extra_config": {
+          "additionalProperties": true,
+          "description": "Provider-specific overrides (e.g. organization_id, api_version)",
+          "title": "Extra Config",
+          "type": "object"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "DB record UUID (set by storage layer)",
+          "title": "Id"
+        },
+        "created_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created At"
+        },
+        "updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Updated At"
+        }
+      },
+      "required": [
+        "name",
+        "provider_type"
+      ],
+      "title": "LLMProviderConfig",
+      "type": "object"
+    },
+    "ModelRoute": {
+      "description": "Category-based model routing rule.\n\nMaps a semantic task category to a (provider, model) pair.\nInspired by auto-exec-mechanism's routing table and oh-my-openagent patterns.\n\nExample:\n    route = ModelRoute(\n        category=\"creative\",\n        provider=\"openai\",\n        model=\"gpt-4o\",\n        fallback_model=\"gpt-4o-mini\",\n        keywords=[\"write\", \"draft\", \"copy\", \"写作\", \"文案\"],\n        description=\"Creative writing / copy / content generation\",\n        cost_level=\"medium\",\n    )",
+      "properties": {
+        "category": {
+          "description": "Task classification category",
+          "enum": [
+            "ultrabrain",
+            "visual-engineering",
+            "deep",
+            "creative",
+            "quick"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "provider": {
+          "description": "Target provider name (refers to LLMProviderConfig.name)",
+          "title": "Provider",
+          "type": "string"
+        },
+        "model": {
+          "description": "Target model to use for this category",
+          "title": "Model",
+          "type": "string"
+        },
+        "fallback_model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Fallback model when primary is unavailable",
+          "title": "Fallback Model"
+        },
+        "keywords": {
+          "description": "Keywords used by the classifier to auto-assign categories",
+          "items": {
+            "type": "string"
+          },
+          "title": "Keywords",
+          "type": "array"
+        },
+        "description": {
+          "default": "",
+          "description": "Human-readable description of what this category handles",
+          "title": "Description",
+          "type": "string"
+        },
+        "cost_level": {
+          "default": "medium",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Cost Level",
+          "type": "string"
+        },
+        "priority": {
+          "default": 0,
+          "title": "Priority",
+          "type": "integer"
+        },
+        "usage_count": {
+          "default": 0,
+          "description": "How many times this route was hit",
+          "title": "Usage Count",
+          "type": "integer"
+        },
+        "last_used_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Used At"
+        }
+      },
+      "required": [
+        "category",
+        "provider",
+        "model"
+      ],
+      "title": "ModelRoute",
+      "type": "object"
+    },
+    "UserLLMOverride": {
+      "description": "Per-user provider override.\n\nAllows individual users to supply their own API keys instead of using the\nadmin-configured shared key. This is the data contract for the orchestrator's\nuser_api_keys table.\n\nWhen a user override exists, the system uses the user's key + optional base_url\ninstead of the admin config for that provider.",
+      "properties": {
+        "user_uuid": {
+          "description": "User who owns this override",
+          "title": "User Uuid",
+          "type": "string"
+        },
+        "provider_name": {
+          "description": "Provider to override (matches LLMProviderConfig.name)",
+          "title": "Provider Name",
+          "type": "string"
+        },
+        "api_key": {
+          "description": "User's own API key (plaintext — encrypt at rest)",
+          "title": "Api Key",
+          "type": "string"
+        },
+        "base_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional custom endpoint override for this user",
+          "title": "Base Url"
+        },
+        "model": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional model restriction for this user",
+          "title": "Model"
+        },
+        "is_active": {
+          "default": true,
+          "title": "Is Active",
+          "type": "boolean"
+        },
+        "created_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created At"
+        },
+        "updated_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Updated At"
+        }
+      },
+      "required": [
+        "user_uuid",
+        "provider_name",
+        "api_key"
+      ],
+      "title": "UserLLMOverride",
+      "type": "object"
+    }
+  },
+  "description": "Complete LLM configuration for a project/service.\n\nAggregates provider definitions, routing rules, and defaults into one object.\nThis is the top-level config that projects like platform-orchestrator can\nconstruct from their storage layer and pass to consumers.\n\nExample YAML-equivalent:\n    providers:\n      - name: openai\n        provider_type: openai_compat\n        base_url: https://api.openai.com/v1\n        models: [gpt-4o, gpt-4o-mini]\n        default_model: gpt-4o\n      - name: doubao\n        provider_type: doubao\n        ...\n\n    routing:\n      quick:\n        provider: openai\n        model: gpt-4o-mini\n        cost_level: low\n      deep:\n        provider: openai\n        model: gpt-4o\n        cost_level: medium\n\n    defaults:\n      temperature: 0.7\n      max_tokens: 4096\n      timeout: 60",
+  "properties": {
+    "providers": {
+      "items": {
+        "$ref": "#/$defs/LLMProviderConfig"
+      },
+      "title": "Providers",
+      "type": "array"
+    },
+    "routing": {
+      "items": {
+        "$ref": "#/$defs/ModelRoute"
+      },
+      "title": "Routing",
+      "type": "array"
+    },
+    "user_overrides": {
+      "items": {
+        "$ref": "#/$defs/UserLLMOverride"
+      },
+      "title": "User Overrides",
+      "type": "array"
+    },
+    "default_temperature": {
+      "default": 0.7,
+      "maximum": 2.0,
+      "minimum": 0.0,
+      "title": "Default Temperature",
+      "type": "number"
+    },
+    "default_max_tokens": {
+      "default": 4096,
+      "exclusiveMinimum": 0,
+      "title": "Default Max Tokens",
+      "type": "integer"
+    },
+    "default_timeout": {
+      "default": 60,
+      "exclusiveMinimum": 0,
+      "title": "Default Timeout",
+      "type": "integer"
+    },
+    "default_provider": {
+      "default": "",
+      "description": "Fallback provider if routing fails",
+      "title": "Default Provider",
+      "type": "string"
+    }
+  },
+  "title": "LLMGlobalConfig",
+  "type": "object"
+}

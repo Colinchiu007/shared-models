@@ -1,0 +1,36 @@
+{
+  "description": "Standard JWT payload used across all services",
+  "properties": {
+    "user_id": {
+      "title": "User Id",
+      "type": "integer"
+    },
+    "username": {
+      "title": "Username",
+      "type": "string"
+    },
+    "role": {
+      "default": "user",
+      "title": "Role",
+      "type": "string"
+    },
+    "exp": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Exp"
+    }
+  },
+  "required": [
+    "user_id",
+    "username"
+  ],
+  "title": "JWTPayload",
+  "type": "object"
+}

@@ -1,0 +1,60 @@
+{
+  "additionalProperties": true,
+  "description": "Public user profile (safe for API response).",
+  "properties": {
+    "id": {
+      "description": "User UUID",
+      "title": "Id",
+      "type": "string"
+    },
+    "username": {
+      "description": "Username",
+      "title": "Username",
+      "type": "string"
+    },
+    "email": {
+      "description": "Email address",
+      "title": "Email",
+      "type": "string"
+    },
+    "subscription_type": {
+      "default": "free",
+      "description": "Subscription tier",
+      "enum": [
+        "free",
+        "basic",
+        "pro",
+        "enterprise"
+      ],
+      "title": "Subscription Type",
+      "type": "string"
+    },
+    "created_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Registration date",
+      "title": "Created At"
+    },
+    "is_active": {
+      "default": true,
+      "description": "Account active status",
+      "title": "Is Active",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "username",
+    "email"
+  ],
+  "title": "UserResponse",
+  "type": "object"
+}

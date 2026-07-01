@@ -1,0 +1,84 @@
+{
+  "description": "Per-user provider override.\n\nAllows individual users to supply their own API keys instead of using the\nadmin-configured shared key. This is the data contract for the orchestrator's\nuser_api_keys table.\n\nWhen a user override exists, the system uses the user's key + optional base_url\ninstead of the admin config for that provider.",
+  "properties": {
+    "user_uuid": {
+      "description": "User who owns this override",
+      "title": "User Uuid",
+      "type": "string"
+    },
+    "provider_name": {
+      "description": "Provider to override (matches LLMProviderConfig.name)",
+      "title": "Provider Name",
+      "type": "string"
+    },
+    "api_key": {
+      "description": "User's own API key (plaintext — encrypt at rest)",
+      "title": "Api Key",
+      "type": "string"
+    },
+    "base_url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Optional custom endpoint override for this user",
+      "title": "Base Url"
+    },
+    "model": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Optional model restriction for this user",
+      "title": "Model"
+    },
+    "is_active": {
+      "default": true,
+      "title": "Is Active",
+      "type": "boolean"
+    },
+    "created_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Created At"
+    },
+    "updated_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Updated At"
+    }
+  },
+  "required": [
+    "user_uuid",
+    "provider_name",
+    "api_key"
+  ],
+  "title": "UserLLMOverride",
+  "type": "object"
+}

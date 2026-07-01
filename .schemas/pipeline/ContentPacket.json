@@ -1,0 +1,314 @@
+{
+  "$defs": {
+    "PipelineStage": {
+      "description": "管道生命周期阶段。",
+      "enum": [
+        "collected",
+        "awaiting",
+        "rewritten",
+        "split",
+        "prompted",
+        "generated",
+        "published",
+        "failed"
+      ],
+      "title": "PipelineStage",
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "description": "数据管道通用容器，携带内容从采集到发布的完整上下文。\n\n这是管道中最核心的数据契约。每个环节读取 input_data，写入 result_data，\n然后推进 stage。\n\n┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐\n│ COLLECTED│───→│ REWRITTEN│───→│  SPLIT   │───→│ PROMPTED │───→│ GENERATED│\n│ trendscope│   │aggregator│   │ splitter │   │prompt-eng│   │Story2Video│\n└──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘",
+  "properties": {
+    "id": {
+      "description": "Content UUID (pipe-global unique ID)",
+      "title": "Id",
+      "type": "string"
+    },
+    "stage": {
+      "$ref": "#/$defs/PipelineStage",
+      "default": "collected",
+      "description": "当前管道阶段"
+    },
+    "source_platform": {
+      "description": "来源平台代号: baidu/weibo/douyin/…",
+      "title": "Source Platform",
+      "type": "string"
+    },
+    "source_url": {
+      "description": "原文链接",
+      "title": "Source Url",
+      "type": "string"
+    },
+    "source_title": {
+      "description": "原标题",
+      "title": "Source Title",
+      "type": "string"
+    },
+    "source_content": {
+      "description": "原始正文内容",
+      "title": "Source Content",
+      "type": "string"
+    },
+    "source_hot_score": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "热榜热度分（来自 trendscope）",
+      "title": "Source Hot Score"
+    },
+    "collected_at": {
+      "description": "采集时间",
+      "format": "date-time",
+      "title": "Collected At",
+      "type": "string"
+    },
+    "rewritten_title": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "AI 改写标题",
+      "title": "Rewritten Title"
+    },
+    "rewritten_content": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "AI 改写正文",
+      "title": "Rewritten Content"
+    },
+    "rewrite_style": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "改写风格",
+      "title": "Rewrite Style"
+    },
+    "rewritten_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "改写完成时间",
+      "title": "Rewritten At"
+    },
+    "split_result": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "分句结果 (SplitResult dict)",
+      "title": "Split Result"
+    },
+    "total_scenes": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "分句场景数",
+      "title": "Total Scenes"
+    },
+    "total_duration": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "估算时长(秒)",
+      "title": "Total Duration"
+    },
+    "split_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "分句完成时间",
+      "title": "Split At"
+    },
+    "optimized_prompts": {
+      "anyOf": [
+        {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "场景级优化提示词列表",
+      "title": "Optimized Prompts"
+    },
+    "prompted_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "提示词优化完成时间",
+      "title": "Prompted At"
+    },
+    "video_url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "生成视频链接",
+      "title": "Video Url"
+    },
+    "video_duration": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "视频实际时长(秒)",
+      "title": "Video Duration"
+    },
+    "generated_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "视频生成完成时间",
+      "title": "Generated At"
+    },
+    "publish_results": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "多平台发布结果 {platform: url}",
+      "title": "Publish Results"
+    },
+    "published_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "发布完成时间",
+      "title": "Published At"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "失败原因",
+      "title": "Error"
+    },
+    "tags": {
+      "description": "标签列表",
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "description": "扩展元数据（各环节自由写入）",
+      "title": "Metadata",
+      "type": "object"
+    }
+  },
+  "required": [
+    "id",
+    "source_platform",
+    "source_url",
+    "source_title",
+    "source_content"
+  ],
+  "title": "ContentPacket",
+  "type": "object"
+}

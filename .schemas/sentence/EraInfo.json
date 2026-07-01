@@ -1,0 +1,31 @@
+{
+  "description": "Era detection result.\n\nMirrors: splitter.models.era.EraInfo (dataclass)",
+  "properties": {
+    "era": {
+      "description": "时代标签: modern / ancient / mixed",
+      "title": "Era",
+      "type": "string"
+    },
+    "confidence": {
+      "description": "置信度 0-1",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence",
+      "type": "number"
+    },
+    "keywords": {
+      "description": "匹配到的关键词列表",
+      "items": {
+        "type": "string"
+      },
+      "title": "Keywords",
+      "type": "array"
+    }
+  },
+  "required": [
+    "era",
+    "confidence"
+  ],
+  "title": "EraInfo",
+  "type": "object"
+}

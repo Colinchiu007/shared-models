@@ -1,0 +1,296 @@
+{
+  "$defs": {
+    "EmotionalTrigger": {
+      "description": "Emotional trigger categories for content.",
+      "enum": [
+        "curiosity",
+        "surprise",
+        "controversy",
+        "empathy",
+        "anxiety",
+        "fear",
+        "joy",
+        "anger",
+        "inspiration",
+        "none"
+      ],
+      "title": "EmotionalTrigger",
+      "type": "string"
+    },
+    "EngagementMetrics": {
+      "description": "Raw and normalized engagement metrics.",
+      "properties": {
+        "likes": {
+          "default": 0,
+          "title": "Likes",
+          "type": "integer"
+        },
+        "comments": {
+          "default": 0,
+          "title": "Comments",
+          "type": "integer"
+        },
+        "shares": {
+          "default": 0,
+          "title": "Shares",
+          "type": "integer"
+        },
+        "favorites": {
+          "default": 0,
+          "title": "Favorites",
+          "type": "integer"
+        },
+        "views": {
+          "default": 0,
+          "title": "Views",
+          "type": "integer"
+        },
+        "likes_norm": {
+          "default": 0.0,
+          "title": "Likes Norm",
+          "type": "number"
+        },
+        "comments_norm": {
+          "default": 0.0,
+          "title": "Comments Norm",
+          "type": "number"
+        },
+        "shares_norm": {
+          "default": 0.0,
+          "title": "Shares Norm",
+          "type": "number"
+        },
+        "favorites_norm": {
+          "default": 0.0,
+          "title": "Favorites Norm",
+          "type": "number"
+        },
+        "total_engagement": {
+          "default": 0,
+          "title": "Total Engagement",
+          "type": "integer"
+        },
+        "engagement_rate": {
+          "default": 0.0,
+          "title": "Engagement Rate",
+          "type": "number"
+        },
+        "viral_score": {
+          "default": 0.0,
+          "title": "Viral Score",
+          "type": "number"
+        }
+      },
+      "title": "EngagementMetrics",
+      "type": "object"
+    },
+    "TitleAnalysis": {
+      "description": "Extracted title structure and pattern analysis.",
+      "properties": {
+        "title": {
+          "description": "Original title text",
+          "title": "Title",
+          "type": "string"
+        },
+        "structure": {
+          "$ref": "#/$defs/TitleStructure",
+          "default": "other"
+        },
+        "length": {
+          "default": 0,
+          "description": "Character count",
+          "title": "Length",
+          "type": "integer"
+        },
+        "word_count": {
+          "default": 0,
+          "title": "Word Count",
+          "type": "integer"
+        },
+        "has_numbers": {
+          "default": false,
+          "title": "Has Numbers",
+          "type": "boolean"
+        },
+        "has_questions": {
+          "default": false,
+          "title": "Has Questions",
+          "type": "boolean"
+        },
+        "has_emojis": {
+          "default": false,
+          "title": "Has Emojis",
+          "type": "boolean"
+        },
+        "has_colon": {
+          "default": false,
+          "title": "Has Colon",
+          "type": "boolean"
+        },
+        "has_power_words": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Has Power Words",
+          "type": "array"
+        },
+        "emotion": {
+          "$ref": "#/$defs/EmotionalTrigger",
+          "default": "none"
+        },
+        "confidence": {
+          "default": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "title"
+      ],
+      "title": "TitleAnalysis",
+      "type": "object"
+    },
+    "TitleStructure": {
+      "description": "Classified title structure patterns.",
+      "enum": [
+        "question",
+        "numbered_list",
+        "how_to",
+        "comparison",
+        "suspense",
+        "direct",
+        "controversy",
+        "story",
+        "negative",
+        "command",
+        "curiosity_gap",
+        "timely",
+        "other"
+      ],
+      "title": "TitleStructure",
+      "type": "string"
+    },
+    "ViralFactor": {
+      "description": "A single viral factor dimension with score and evidence.",
+      "properties": {
+        "name": {
+          "description": "Factor name, e.g. 'title_structure', 'emotion'",
+          "title": "Name",
+          "type": "string"
+        },
+        "label": {
+          "default": "",
+          "description": "Human-readable label in Chinese",
+          "title": "Label",
+          "type": "string"
+        },
+        "score": {
+          "default": 0.0,
+          "description": "Normalized score 0-1",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Score",
+          "type": "number"
+        },
+        "confidence": {
+          "default": 0.0,
+          "description": "Detection confidence",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "evidence": {
+          "description": "Supporting evidence snippets",
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "details": {
+          "additionalProperties": true,
+          "description": "Extra factor-specific data",
+          "title": "Details",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "ViralFactor",
+      "type": "object"
+    }
+  },
+  "description": "Per-article viral factor breakdown.",
+  "properties": {
+    "platform_code": {
+      "default": "",
+      "title": "Platform Code",
+      "type": "string"
+    },
+    "title": {
+      "default": "",
+      "title": "Title",
+      "type": "string"
+    },
+    "author_name": {
+      "default": "",
+      "title": "Author Name",
+      "type": "string"
+    },
+    "author_followers": {
+      "default": 0,
+      "title": "Author Followers",
+      "type": "integer"
+    },
+    "source_url": {
+      "default": "",
+      "title": "Source Url",
+      "type": "string"
+    },
+    "category": {
+      "default": "general",
+      "title": "Category",
+      "type": "string"
+    },
+    "title_analysis": {
+      "$ref": "#/$defs/TitleAnalysis"
+    },
+    "engagement": {
+      "$ref": "#/$defs/EngagementMetrics"
+    },
+    "factors": {
+      "items": {
+        "$ref": "#/$defs/ViralFactor"
+      },
+      "title": "Factors",
+      "type": "array"
+    },
+    "overall_score": {
+      "default": 0.0,
+      "title": "Overall Score",
+      "type": "number"
+    },
+    "rank": {
+      "default": 0,
+      "title": "Rank",
+      "type": "integer"
+    },
+    "snapshot_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Snapshot At"
+    }
+  },
+  "title": "ArticleViralProfile",
+  "type": "object"
+}

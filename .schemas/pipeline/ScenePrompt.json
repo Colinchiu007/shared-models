@@ -1,0 +1,68 @@
+{
+  "additionalProperties": true,
+  "description": "单场景的提示词与字幕配置。",
+  "properties": {
+    "scene_id": {
+      "description": "场景序号 (0-based)",
+      "minimum": 0,
+      "title": "Scene Id",
+      "type": "integer"
+    },
+    "title": {
+      "default": "",
+      "description": "场景标题",
+      "title": "Title",
+      "type": "string"
+    },
+    "text": {
+      "description": "场景原文",
+      "minLength": 1,
+      "title": "Text",
+      "type": "string"
+    },
+    "prompt": {
+      "description": "AI 生成的图片提示词",
+      "minLength": 1,
+      "title": "Prompt",
+      "type": "string"
+    },
+    "subtitle_text": {
+      "default": "",
+      "description": "该场景字幕文本",
+      "title": "Subtitle Text",
+      "type": "string"
+    },
+    "duration": {
+      "default": 5.0,
+      "description": "场景时长(秒)",
+      "exclusiveMinimum": 0,
+      "title": "Duration",
+      "type": "number"
+    },
+    "character": {
+      "default": "",
+      "description": "涉及角色",
+      "title": "Character",
+      "type": "string"
+    },
+    "setting": {
+      "default": "",
+      "description": "场景设定",
+      "title": "Setting",
+      "type": "string"
+    },
+    "mood": {
+      "default": "",
+      "description": "场景情绪",
+      "title": "Mood",
+      "type": "string"
+    }
+  },
+  "required": [
+    "scene_id",
+    "text",
+    "prompt"
+  ],
+  "title": "ScenePrompt",
+  "type": "object"
+}

@@ -1,0 +1,57 @@
+{
+  "properties": {
+    "username": {
+      "maxLength": 64,
+      "minLength": 3,
+      "title": "Username",
+      "type": "string"
+    },
+    "email": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Email"
+    },
+    "phone": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Phone"
+    },
+    "password": {
+      "minLength": 8,
+      "title": "Password",
+      "type": "string"
+    },
+    "verify_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Verify Code"
+    }
+  },
+  "required": [
+    "username",
+    "password"
+  ],
+  "title": "UserRegisterRequest",
+  "type": "object"
+}

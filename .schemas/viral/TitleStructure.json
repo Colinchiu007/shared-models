@@ -1,0 +1,20 @@
+{
+  "description": "Classified title structure patterns.",
+  "enum": [
+    "question",
+    "numbered_list",
+    "how_to",
+    "comparison",
+    "suspense",
+    "direct",
+    "controversy",
+    "story",
+    "negative",
+    "command",
+    "curiosity_gap",
+    "timely",
+    "other"
+  ],
+  "title": "TitleStructure",
+  "type": "string"
+}

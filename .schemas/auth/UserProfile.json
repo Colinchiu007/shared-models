@@ -1,0 +1,141 @@
+{
+  "additionalProperties": true,
+  "description": "Extended user profile with quotas and preferences.",
+  "properties": {
+    "user_id": {
+      "description": "Internal user ID",
+      "title": "User Id",
+      "type": "integer"
+    },
+    "username": {
+      "description": "Username",
+      "title": "Username",
+      "type": "string"
+    },
+    "display_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Display name",
+      "title": "Display Name"
+    },
+    "avatar_url": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Avatar URL",
+      "title": "Avatar Url"
+    },
+    "bio": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Bio text",
+      "title": "Bio"
+    },
+    "website": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Personal website",
+      "title": "Website"
+    },
+    "company": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Company name",
+      "title": "Company"
+    },
+    "location": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Location",
+      "title": "Location"
+    },
+    "subscription_plan": {
+      "default": "free",
+      "description": "Subscription plan",
+      "enum": [
+        "free",
+        "basic",
+        "pro"
+      ],
+      "title": "Subscription Plan",
+      "type": "string"
+    },
+    "video_quota": {
+      "default": 3,
+      "description": "Daily video generation quota",
+      "title": "Video Quota",
+      "type": "integer"
+    },
+    "videos_used_today": {
+      "default": 0,
+      "description": "Videos generated today",
+      "title": "Videos Used Today",
+      "type": "integer"
+    },
+    "preferred_language": {
+      "default": "zh-CN",
+      "description": "UI language preference",
+      "title": "Preferred Language",
+      "type": "string"
+    },
+    "preferred_voice": {
+      "default": "zh-CN-XiaoxiaoNeural",
+      "description": "TTS voice preference",
+      "title": "Preferred Voice",
+      "type": "string"
+    },
+    "preferred_video_ratio": {
+      "default": "9:16",
+      "description": "Video aspect ratio",
+      "title": "Preferred Video Ratio",
+      "type": "string"
+    }
+  },
+  "required": [
+    "user_id",
+    "username"
+  ],
+  "title": "UserProfile",
+  "type": "object"
+}

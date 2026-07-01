@@ -1,0 +1,34 @@
+{
+  "description": "Subtitle block for video generation.\n\nMirrors: splitter.models.subtitle.SubtitleBlock (dataclass)",
+  "properties": {
+    "text": {
+      "title": "Text",
+      "type": "string"
+    },
+    "display_order": {
+      "title": "Display Order",
+      "type": "integer"
+    },
+    "start_time": {
+      "title": "Start Time",
+      "type": "number"
+    },
+    "duration": {
+      "title": "Duration",
+      "type": "number"
+    },
+    "parent_segment_id": {
+      "title": "Parent Segment Id",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "text",
+    "display_order",
+    "start_time",
+    "duration",
+    "parent_segment_id"
+  ],
+  "title": "SubtitleBlock",
+  "type": "object"
+}

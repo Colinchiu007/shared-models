@@ -1,0 +1,15 @@
+{
+  "description": "管道生命周期阶段。",
+  "enum": [
+    "collected",
+    "awaiting",
+    "rewritten",
+    "split",
+    "prompted",
+    "generated",
+    "published",
+    "failed"
+  ],
+  "title": "PipelineStage",
+  "type": "string"
+}

@@ -1,0 +1,46 @@
+{
+  "description": "URL content collection result.\n\nMirrors: content-aggregator CollectResponse",
+  "properties": {
+    "title": {
+      "default": "",
+      "description": "Collected article title",
+      "title": "Title",
+      "type": "string"
+    },
+    "content": {
+      "default": "",
+      "description": "Collected article content (plain text)",
+      "title": "Content",
+      "type": "string"
+    },
+    "source_url": {
+      "description": "Original source URL",
+      "title": "Source Url",
+      "type": "string"
+    },
+    "author": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Original author name",
+      "title": "Author"
+    },
+    "word_count": {
+      "default": 0,
+      "description": "Word count of collected content",
+      "title": "Word Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "source_url"
+  ],
+  "title": "CollectResult",
+  "type": "object"
+}
