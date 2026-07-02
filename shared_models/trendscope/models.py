@@ -30,7 +30,7 @@ class TrendingTopicModel(BaseModel):
     hot_value_norm: float = 0.0
     topic_url: str = ""
     category: str = "general"
-    snapshot_at: str = """"""
+    snapshot_at: str = ""
 
 
 class HotArticleModel(BaseModel):
