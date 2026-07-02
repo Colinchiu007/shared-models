@@ -47,8 +47,9 @@ class RegisterRequest(BaseModel):
     """Registration request — platform-orchestrator compatible.
 
     Mirrors: platform-orchestrator/routers/auth.py RegisterRequest
+    Username must match: letters, digits, underscore only.
     """
-    username: str = Field(..., min_length=3, max_length=50)
+    username: str = Field(..., min_length=3, max_length=50, pattern=r"^[a-zA-Z0-9_]+$")
     email: str | None = Field(None)
     password: str = Field(..., min_length=6, max_length=128)
 

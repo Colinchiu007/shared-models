@@ -30,7 +30,7 @@ class TrendingTopicModel(BaseModel):
     hot_value_norm: float = 0.0
     topic_url: str = ""
     category: str = "general"
-    snapshot_at: str = ""
+    snapshot_at: str = """"""
 
 
 class HotArticleModel(BaseModel):
@@ -60,7 +60,7 @@ class HotArticleModel(BaseModel):
     viral_score_norm: float = 0.0 # 按平台归一化 (0-100)
     # ── ──
     publish_at: str = ""
-    snapshot_at: str = 
+    snapshot_at: str = ""
 
 
 class TrendingPipelineItem(BaseModel):
